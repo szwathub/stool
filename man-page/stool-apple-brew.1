@@ -1,0 +1,26 @@
+.ie \n(.g .ds Aq \(aq
+.el .ds Aq '
+.TH stool-apple-brew 1  "stool-apple-brew "
+.SH NAME
+stool\-apple\-brew \- Initialize Homebrew and install software from a Brewfile
+.SH SYNOPSIS
+\fBstool\-apple\-brew\fR [\fB\-\-prefix\fR] [\fB\-h\fR|\fB\-\-help\fR] <\fIsubcommands\fR>
+.SH DESCRIPTION
+Initialize Homebrew and install software from a Brewfile
+.SH OPTIONS
+.TP
+\fB\-\-prefix\fR \fI<DIR>\fR
+Select a Homebrew prefix instead of HOMEBREW_PREFIX, PATH or the native default
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Print help
+.SH SUBCOMMANDS
+.TP
+stool\-apple\-brew\-init(1)
+Reuse Homebrew or install it with the official installer
+.TP
+stool\-apple\-brew\-install(1)
+Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades
+.TP
+stool\-apple\-brew\-help(1)
+Print this message or the help of the given subcommand(s)

@@ -1,0 +1,23 @@
+.ie \n(.g .ds Aq \(aq
+.el .ds Aq '
+.TH stool-apple 1  "stool-apple "
+.SH NAME
+stool\-apple \- Manage macOS preferences and Homebrew independently of dotfiles
+.SH SYNOPSIS
+\fBstool\-apple\fR [\fB\-h\fR|\fB\-\-help\fR] <\fIsubcommands\fR>
+.SH DESCRIPTION
+Manage macOS preferences and Homebrew independently of dotfiles
+.SH OPTIONS
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Print help
+.SH SUBCOMMANDS
+.TP
+stool\-apple\-init(1)
+Set the current user\*(Aqs Dock minimization animation to suck
+.TP
+stool\-apple\-brew(1)
+Initialize Homebrew and install software from a Brewfile
+.TP
+stool\-apple\-help(1)
+Print this message or the help of the given subcommand(s)

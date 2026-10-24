@@ -1,0 +1,1345 @@
+#compdef stool
+
+autoload -U is-at-least
+
+_stool() {
+    typeset -A opt_args
+    typeset -a _arguments_options
+    local ret=1
+
+    if is-at-least 5.2; then
+        _arguments_options=(-s -S -C)
+    else
+        _arguments_options=(-s -C)
+    fi
+
+    local context curcontext="$curcontext" state line
+    _arguments "${_arguments_options[@]}" : \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'-V[Print version]' \
+'--version[Print version]' \
+":: :_stool_commands" \
+"*::: :->stool" \
+&& ret=0
+    case $state in
+    (stool)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:stool-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" : \
+'--dotfile-url=[Default Git URL; saved without cloning or contacting the repository]:URL:_default' \
+'--key-file=[Password-encrypted offline archive produced by stool secrets backup]:FILE:_files' \
+'--brewfile=[Trusted local Brewfile (defaults to ~/.Brewfile; missing default is skipped)]:FILE:_files' \
+'--passphrase-file=[Private external backup password file (requires --key-file)]:FILE:_files' \
+'--dry-run[Preview without saving configuration, decrypting keys or changing the system]' \
+'--non-interactive[Allow package installation without terminal input; prepare privileges separately]' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(apple)
+_arguments "${_arguments_options[@]}" : \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_stool__apple_commands" \
+"*::: :->apple" \
+&& ret=0
+
+    case $state in
+    (apple)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:stool-apple-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" : \
+'--dry-run[Show current preferences and planned changes without writing]' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(brew)
+_arguments "${_arguments_options[@]}" : \
+'--prefix=[Select a Homebrew prefix instead of HOMEBREW_PREFIX, PATH or the native default]:DIR:_files' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_stool__apple__brew_commands" \
+"*::: :->brew" \
+&& ret=0
+
+    case $state in
+    (brew)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:stool-apple-brew-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" : \
+'--prefix=[Select a Homebrew prefix instead of HOMEBREW_PREFIX, PATH or the native default]:DIR:_files' \
+'--dry-run[Show the plan without downloading, installing or evaluating the Brewfile]' \
+'--non-interactive[Run without terminal input (requires privileges to be prepared separately)]' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(install)
+_arguments "${_arguments_options[@]}" : \
+'--file=[Trusted Brewfile to install (defaults to ~/.Brewfile)]:FILE:_files' \
+'--prefix=[Select a Homebrew prefix instead of HOMEBREW_PREFIX, PATH or the native default]:DIR:_files' \
+'--dry-run[Show the plan without downloading, installing or evaluating the Brewfile]' \
+'--non-interactive[Run without terminal input (requires privileges to be prepared separately)]' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" : \
+":: :_stool__apple__brew__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:stool-apple-brew-help-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(install)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(help)
+_arguments "${_arguments_options[@]}" : \
+":: :_stool__apple__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:stool-apple-help-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(brew)
+_arguments "${_arguments_options[@]}" : \
+":: :_stool__apple__help__brew_commands" \
+"*::: :->brew" \
+&& ret=0
+
+    case $state in
+    (brew)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:stool-apple-help-brew-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(install)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(help)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(dotfile)
+_arguments "${_arguments_options[@]}" : \
+'--source=[Local source repository (saved by init)]:SOURCE:_files' \
+'--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \
+'*--data=[Override template data (key=value; JSON values are accepted)]:DATA:_default' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_stool__dotfile_commands" \
+"*::: :->dotfile" \
+&& ret=0
+
+    case $state in
+    (dotfile)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:stool-dotfile-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" : \
+'--branch=[]:BRANCH:_default' \
+'--source=[Local source repository (saved by init)]:SOURCE:_files' \
+'--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \
+'*--data=[Override template data (key=value; JSON values are accepted)]:DATA:_default' \
+'--apply[Deploy after cloning]' \
+'(--no-recurse-submodules)--recurse-submodules[Explicitly enable recursive submodules (the default for new repositories)]' \
+'(--recurse-submodules)--no-recurse-submodules[Disable recursive submodule initialization and subsequent updates]' \
+'--builtin[Clone using the built-in Git backend]' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'::repo -- Git URL (defaults to dotfile.url saved by stool init):_default' \
+&& ret=0
+;;
+(diff)
+_arguments "${_arguments_options[@]}" : \
+'--source=[Local source repository (saved by init)]:SOURCE:_files' \
+'--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \
+'*--data=[Override template data (key=value; JSON values are accepted)]:DATA:_default' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(status)
+_arguments "${_arguments_options[@]}" : \
+'--source=[Local source repository (saved by init)]:SOURCE:_files' \
+'--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \
+'*--data=[Override template data (key=value; JSON values are accepted)]:DATA:_default' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(apply)
+_arguments "${_arguments_options[@]}" : \
+'--prompt=[Interactive conflict handling (auto only prompts on a terminal)]:PROMPT:(auto always never)' \
+'--source=[Local source repository (saved by init)]:SOURCE:_files' \
+'--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \
+'*--data=[Override template data (key=value; JSON values are accepted)]:DATA:_default' \
+'--dry-run[]' \
+'--force[Back up and overwrite conflicting destination entries]' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(update)
+_arguments "${_arguments_options[@]}" : \
+'--source=[Local source repository (saved by init)]:SOURCE:_files' \
+'--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \
+'*--data=[Override template data (key=value; JSON values are accepted)]:DATA:_default' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(managed)
+_arguments "${_arguments_options[@]}" : \
+'--source=[Local source repository (saved by init)]:SOURCE:_files' \
+'--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \
+'*--data=[Override template data (key=value; JSON values are accepted)]:DATA:_default' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(add)
+_arguments "${_arguments_options[@]}" : \
+'--source=[Local source repository (saved by init)]:SOURCE:_files' \
+'--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \
+'*--data=[Override template data (key=value; JSON values are accepted)]:DATA:_default' \
+'--template[]' \
+'--encrypt[]' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'*::paths:_files' \
+&& ret=0
+;;
+(edit)
+_arguments "${_arguments_options[@]}" : \
+'--source=[Local source repository (saved by init)]:SOURCE:_files' \
+'--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \
+'*--data=[Override template data (key=value; JSON values are accepted)]:DATA:_default' \
+'--apply[]' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'*::paths:_files' \
+&& ret=0
+;;
+(unmanaged)
+_arguments "${_arguments_options[@]}" : \
+'--source=[Local source repository (saved by init)]:SOURCE:_files' \
+'--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \
+'*--data=[Override template data (key=value; JSON values are accepted)]:DATA:_default' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(verify)
+_arguments "${_arguments_options[@]}" : \
+'--source=[Local source repository (saved by init)]:SOURCE:_files' \
+'--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \
+'*--data=[Override template data (key=value; JSON values are accepted)]:DATA:_default' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(doctor)
+_arguments "${_arguments_options[@]}" : \
+'--source=[Local source repository (saved by init)]:SOURCE:_files' \
+'--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \
+'*--data=[Override template data (key=value; JSON values are accepted)]:DATA:_default' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(archive)
+_arguments "${_arguments_options[@]}" : \
+'--format=[]:FORMAT:(tar tgz zip)' \
+'-o+[]:OUTPUT:_files' \
+'--output=[]:OUTPUT:_files' \
+'--source=[Local source repository (saved by init)]:SOURCE:_files' \
+'--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \
+'*--data=[Override template data (key=value; JSON values are accepted)]:DATA:_default' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(execute-template)
+_arguments "${_arguments_options[@]}" : \
+'()--file=[]:FILE:_files' \
+'--source=[Local source repository (saved by init)]:SOURCE:_files' \
+'--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \
+'*--data=[Override template data (key=value; JSON values are accepted)]:DATA:_default' \
+'--init[]' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'::template:_default' \
+&& ret=0
+;;
+(data)
+_arguments "${_arguments_options[@]}" : \
+'--source=[Local source repository (saved by init)]:SOURCE:_files' \
+'--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \
+'*--data=[Override template data (key=value; JSON values are accepted)]:DATA:_default' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(keygen)
+_arguments "${_arguments_options[@]}" : \
+'--output=[]:OUTPUT:_files' \
+'--source=[Local source repository (saved by init)]:SOURCE:_files' \
+'--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \
+'*--data=[Override template data (key=value; JSON values are accepted)]:DATA:_default' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(cd)
+_arguments "${_arguments_options[@]}" : \
+'--source=[Local source repository (saved by init)]:SOURCE:_files' \
+'--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \
+'*--data=[Override template data (key=value; JSON values are accepted)]:DATA:_default' \
+'--print[]' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" : \
+":: :_stool__dotfile__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:stool-dotfile-help-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(diff)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(status)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(apply)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(update)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(managed)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(add)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(edit)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(unmanaged)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(verify)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(doctor)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(archive)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(execute-template)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(data)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(keygen)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(cd)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(secrets)
+_arguments "${_arguments_options[@]}" : \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_stool__secrets_commands" \
+"*::: :->secrets" \
+&& ret=0
+
+    case $state in
+    (secrets)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:stool-secrets-command-$line[1]:"
+        case $line[1] in
+            (backup)
+_arguments "${_arguments_options[@]}" : \
+'--input=[Source user directory (defaults to the current user environment)]:INPUT:_files' \
+'--output=[New backup file (defaults to stool-keys-<timestamp>.tar.age in the current directory)]:OUTPUT:_files' \
+'--passphrase-file=[Read the password from a private external file or inherited pipe]:PASSPHRASE_FILE:_files' \
+'(--ssh --all)--gpg[Only GPG keys]' \
+'(--gpg --all)--ssh[Only SSH keys]' \
+'(--gpg --ssh)--all[All available key categories (the default)]' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(restore)
+_arguments "${_arguments_options[@]}" : \
+'--input=[Password-encrypted archive created by stool secrets backup]:INPUT:_files' \
+'--output=[Target user directory (defaults to the current user'\''s home)]:OUTPUT:_files' \
+'--passphrase-file=[Read the password from a private external file]:PASSPHRASE_FILE:_files' \
+'(--ssh --all)--gpg[Only GPG keys]' \
+'(--gpg --all)--ssh[Only SSH keys]' \
+'(--gpg --ssh)--all[All available key categories (the default)]' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" : \
+":: :_stool__secrets__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:stool-secrets-help-command-$line[1]:"
+        case $line[1] in
+            (backup)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(restore)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(completions)
+_arguments "${_arguments_options[@]}" : \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':shell:(bash elvish fish powershell zsh)' \
+&& ret=0
+;;
+(man)
+_arguments "${_arguments_options[@]}" : \
+'--output=[]:OUTPUT:_files' \
+'-v[Show more debugging information]' \
+'--verbose[Show more debugging information]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" : \
+":: :_stool__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:stool-help-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(apple)
+_arguments "${_arguments_options[@]}" : \
+":: :_stool__help__apple_commands" \
+"*::: :->apple" \
+&& ret=0
+
+    case $state in
+    (apple)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:stool-help-apple-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(brew)
+_arguments "${_arguments_options[@]}" : \
+":: :_stool__help__apple__brew_commands" \
+"*::: :->brew" \
+&& ret=0
+
+    case $state in
+    (brew)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:stool-help-apple-brew-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(install)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(dotfile)
+_arguments "${_arguments_options[@]}" : \
+":: :_stool__help__dotfile_commands" \
+"*::: :->dotfile" \
+&& ret=0
+
+    case $state in
+    (dotfile)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:stool-help-dotfile-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(diff)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(status)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(apply)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(update)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(managed)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(add)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(edit)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(unmanaged)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(verify)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(doctor)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(archive)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(execute-template)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(data)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(keygen)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(cd)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(secrets)
+_arguments "${_arguments_options[@]}" : \
+":: :_stool__help__secrets_commands" \
+"*::: :->secrets" \
+&& ret=0
+
+    case $state in
+    (secrets)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:stool-help-secrets-command-$line[1]:"
+        case $line[1] in
+            (backup)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(restore)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(completions)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(man)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+}
+
+(( $+functions[_stool_commands] )) ||
+_stool_commands() {
+    local commands; commands=(
+'init:Save dotfiles defaults, initialize Apple settings and optionally restore offline keys' \
+'apple:Manage macOS preferences and Homebrew independently of dotfiles' \
+'dotfile:Manage dotfiles from a Git repository' \
+'secrets:Back up and restore GPG and SSH keys independently of dotfiles' \
+'completions:Generate shell completions from the current command definitions' \
+'man:Render the manual, or write all command manuals to a directory' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'stool commands' commands "$@"
+}
+(( $+functions[_stool__apple_commands] )) ||
+_stool__apple_commands() {
+    local commands; commands=(
+'init:Set the current user'\''s Dock minimization animation to suck' \
+'brew:Initialize Homebrew and install software from a Brewfile' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'stool apple commands' commands "$@"
+}
+(( $+functions[_stool__apple__brew_commands] )) ||
+_stool__apple__brew_commands() {
+    local commands; commands=(
+'init:Reuse Homebrew or install it with the official installer' \
+'install:Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'stool apple brew commands' commands "$@"
+}
+(( $+functions[_stool__apple__brew__help_commands] )) ||
+_stool__apple__brew__help_commands() {
+    local commands; commands=(
+'init:Reuse Homebrew or install it with the official installer' \
+'install:Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'stool apple brew help commands' commands "$@"
+}
+(( $+functions[_stool__apple__brew__help__help_commands] )) ||
+_stool__apple__brew__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool apple brew help help commands' commands "$@"
+}
+(( $+functions[_stool__apple__brew__help__init_commands] )) ||
+_stool__apple__brew__help__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool apple brew help init commands' commands "$@"
+}
+(( $+functions[_stool__apple__brew__help__install_commands] )) ||
+_stool__apple__brew__help__install_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool apple brew help install commands' commands "$@"
+}
+(( $+functions[_stool__apple__brew__init_commands] )) ||
+_stool__apple__brew__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool apple brew init commands' commands "$@"
+}
+(( $+functions[_stool__apple__brew__install_commands] )) ||
+_stool__apple__brew__install_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool apple brew install commands' commands "$@"
+}
+(( $+functions[_stool__apple__help_commands] )) ||
+_stool__apple__help_commands() {
+    local commands; commands=(
+'init:Set the current user'\''s Dock minimization animation to suck' \
+'brew:Initialize Homebrew and install software from a Brewfile' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'stool apple help commands' commands "$@"
+}
+(( $+functions[_stool__apple__help__brew_commands] )) ||
+_stool__apple__help__brew_commands() {
+    local commands; commands=(
+'init:Reuse Homebrew or install it with the official installer' \
+'install:Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades' \
+    )
+    _describe -t commands 'stool apple help brew commands' commands "$@"
+}
+(( $+functions[_stool__apple__help__brew__init_commands] )) ||
+_stool__apple__help__brew__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool apple help brew init commands' commands "$@"
+}
+(( $+functions[_stool__apple__help__brew__install_commands] )) ||
+_stool__apple__help__brew__install_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool apple help brew install commands' commands "$@"
+}
+(( $+functions[_stool__apple__help__help_commands] )) ||
+_stool__apple__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool apple help help commands' commands "$@"
+}
+(( $+functions[_stool__apple__help__init_commands] )) ||
+_stool__apple__help__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool apple help init commands' commands "$@"
+}
+(( $+functions[_stool__apple__init_commands] )) ||
+_stool__apple__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool apple init commands' commands "$@"
+}
+(( $+functions[_stool__completions_commands] )) ||
+_stool__completions_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool completions commands' commands "$@"
+}
+(( $+functions[_stool__dotfile_commands] )) ||
+_stool__dotfile_commands() {
+    local commands; commands=(
+'init:Clone a Git URL and save configuration' \
+'diff:Preview content and permission changes without writing' \
+'status:List pending changes and conflicts' \
+'apply:Deploy the local source repository' \
+'update:Fast-forward the source repository and deploy changes' \
+'managed:List managed destination paths' \
+'add:Import existing destination files into source state' \
+'edit:Edit source files (encrypted files are decrypted only in a private temporary directory)' \
+'unmanaged:List destination files not managed by source' \
+'verify:Return nonzero when the destination differs from source' \
+'doctor:Diagnose repository, configuration, state and optional executables' \
+'archive:Export rendered target files as tar, tar.gz, or zip' \
+'execute-template:Evaluate a Jinja template using repository and local data' \
+'data:Print merged template data as JSON' \
+'keygen:Generate an age identity and print its public recipient' \
+'cd:Start a shell in the source repository, or print its path' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'stool dotfile commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__add_commands] )) ||
+_stool__dotfile__add_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile add commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__apply_commands] )) ||
+_stool__dotfile__apply_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile apply commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__archive_commands] )) ||
+_stool__dotfile__archive_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile archive commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__cd_commands] )) ||
+_stool__dotfile__cd_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile cd commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__data_commands] )) ||
+_stool__dotfile__data_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile data commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__diff_commands] )) ||
+_stool__dotfile__diff_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile diff commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__doctor_commands] )) ||
+_stool__dotfile__doctor_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile doctor commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__edit_commands] )) ||
+_stool__dotfile__edit_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile edit commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__execute-template_commands] )) ||
+_stool__dotfile__execute-template_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile execute-template commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help_commands] )) ||
+_stool__dotfile__help_commands() {
+    local commands; commands=(
+'init:Clone a Git URL and save configuration' \
+'diff:Preview content and permission changes without writing' \
+'status:List pending changes and conflicts' \
+'apply:Deploy the local source repository' \
+'update:Fast-forward the source repository and deploy changes' \
+'managed:List managed destination paths' \
+'add:Import existing destination files into source state' \
+'edit:Edit source files (encrypted files are decrypted only in a private temporary directory)' \
+'unmanaged:List destination files not managed by source' \
+'verify:Return nonzero when the destination differs from source' \
+'doctor:Diagnose repository, configuration, state and optional executables' \
+'archive:Export rendered target files as tar, tar.gz, or zip' \
+'execute-template:Evaluate a Jinja template using repository and local data' \
+'data:Print merged template data as JSON' \
+'keygen:Generate an age identity and print its public recipient' \
+'cd:Start a shell in the source repository, or print its path' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'stool dotfile help commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help__add_commands] )) ||
+_stool__dotfile__help__add_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile help add commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help__apply_commands] )) ||
+_stool__dotfile__help__apply_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile help apply commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help__archive_commands] )) ||
+_stool__dotfile__help__archive_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile help archive commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help__cd_commands] )) ||
+_stool__dotfile__help__cd_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile help cd commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help__data_commands] )) ||
+_stool__dotfile__help__data_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile help data commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help__diff_commands] )) ||
+_stool__dotfile__help__diff_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile help diff commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help__doctor_commands] )) ||
+_stool__dotfile__help__doctor_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile help doctor commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help__edit_commands] )) ||
+_stool__dotfile__help__edit_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile help edit commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help__execute-template_commands] )) ||
+_stool__dotfile__help__execute-template_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile help execute-template commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help__help_commands] )) ||
+_stool__dotfile__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile help help commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help__init_commands] )) ||
+_stool__dotfile__help__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile help init commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help__keygen_commands] )) ||
+_stool__dotfile__help__keygen_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile help keygen commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help__managed_commands] )) ||
+_stool__dotfile__help__managed_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile help managed commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help__status_commands] )) ||
+_stool__dotfile__help__status_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile help status commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help__unmanaged_commands] )) ||
+_stool__dotfile__help__unmanaged_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile help unmanaged commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help__update_commands] )) ||
+_stool__dotfile__help__update_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile help update commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__help__verify_commands] )) ||
+_stool__dotfile__help__verify_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile help verify commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__init_commands] )) ||
+_stool__dotfile__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile init commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__keygen_commands] )) ||
+_stool__dotfile__keygen_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile keygen commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__managed_commands] )) ||
+_stool__dotfile__managed_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile managed commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__status_commands] )) ||
+_stool__dotfile__status_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile status commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__unmanaged_commands] )) ||
+_stool__dotfile__unmanaged_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile unmanaged commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__update_commands] )) ||
+_stool__dotfile__update_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile update commands' commands "$@"
+}
+(( $+functions[_stool__dotfile__verify_commands] )) ||
+_stool__dotfile__verify_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool dotfile verify commands' commands "$@"
+}
+(( $+functions[_stool__help_commands] )) ||
+_stool__help_commands() {
+    local commands; commands=(
+'init:Save dotfiles defaults, initialize Apple settings and optionally restore offline keys' \
+'apple:Manage macOS preferences and Homebrew independently of dotfiles' \
+'dotfile:Manage dotfiles from a Git repository' \
+'secrets:Back up and restore GPG and SSH keys independently of dotfiles' \
+'completions:Generate shell completions from the current command definitions' \
+'man:Render the manual, or write all command manuals to a directory' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'stool help commands' commands "$@"
+}
+(( $+functions[_stool__help__apple_commands] )) ||
+_stool__help__apple_commands() {
+    local commands; commands=(
+'init:Set the current user'\''s Dock minimization animation to suck' \
+'brew:Initialize Homebrew and install software from a Brewfile' \
+    )
+    _describe -t commands 'stool help apple commands' commands "$@"
+}
+(( $+functions[_stool__help__apple__brew_commands] )) ||
+_stool__help__apple__brew_commands() {
+    local commands; commands=(
+'init:Reuse Homebrew or install it with the official installer' \
+'install:Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades' \
+    )
+    _describe -t commands 'stool help apple brew commands' commands "$@"
+}
+(( $+functions[_stool__help__apple__brew__init_commands] )) ||
+_stool__help__apple__brew__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help apple brew init commands' commands "$@"
+}
+(( $+functions[_stool__help__apple__brew__install_commands] )) ||
+_stool__help__apple__brew__install_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help apple brew install commands' commands "$@"
+}
+(( $+functions[_stool__help__apple__init_commands] )) ||
+_stool__help__apple__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help apple init commands' commands "$@"
+}
+(( $+functions[_stool__help__completions_commands] )) ||
+_stool__help__completions_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help completions commands' commands "$@"
+}
+(( $+functions[_stool__help__dotfile_commands] )) ||
+_stool__help__dotfile_commands() {
+    local commands; commands=(
+'init:Clone a Git URL and save configuration' \
+'diff:Preview content and permission changes without writing' \
+'status:List pending changes and conflicts' \
+'apply:Deploy the local source repository' \
+'update:Fast-forward the source repository and deploy changes' \
+'managed:List managed destination paths' \
+'add:Import existing destination files into source state' \
+'edit:Edit source files (encrypted files are decrypted only in a private temporary directory)' \
+'unmanaged:List destination files not managed by source' \
+'verify:Return nonzero when the destination differs from source' \
+'doctor:Diagnose repository, configuration, state and optional executables' \
+'archive:Export rendered target files as tar, tar.gz, or zip' \
+'execute-template:Evaluate a Jinja template using repository and local data' \
+'data:Print merged template data as JSON' \
+'keygen:Generate an age identity and print its public recipient' \
+'cd:Start a shell in the source repository, or print its path' \
+    )
+    _describe -t commands 'stool help dotfile commands' commands "$@"
+}
+(( $+functions[_stool__help__dotfile__add_commands] )) ||
+_stool__help__dotfile__add_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help dotfile add commands' commands "$@"
+}
+(( $+functions[_stool__help__dotfile__apply_commands] )) ||
+_stool__help__dotfile__apply_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help dotfile apply commands' commands "$@"
+}
+(( $+functions[_stool__help__dotfile__archive_commands] )) ||
+_stool__help__dotfile__archive_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help dotfile archive commands' commands "$@"
+}
+(( $+functions[_stool__help__dotfile__cd_commands] )) ||
+_stool__help__dotfile__cd_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help dotfile cd commands' commands "$@"
+}
+(( $+functions[_stool__help__dotfile__data_commands] )) ||
+_stool__help__dotfile__data_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help dotfile data commands' commands "$@"
+}
+(( $+functions[_stool__help__dotfile__diff_commands] )) ||
+_stool__help__dotfile__diff_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help dotfile diff commands' commands "$@"
+}
+(( $+functions[_stool__help__dotfile__doctor_commands] )) ||
+_stool__help__dotfile__doctor_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help dotfile doctor commands' commands "$@"
+}
+(( $+functions[_stool__help__dotfile__edit_commands] )) ||
+_stool__help__dotfile__edit_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help dotfile edit commands' commands "$@"
+}
+(( $+functions[_stool__help__dotfile__execute-template_commands] )) ||
+_stool__help__dotfile__execute-template_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help dotfile execute-template commands' commands "$@"
+}
+(( $+functions[_stool__help__dotfile__init_commands] )) ||
+_stool__help__dotfile__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help dotfile init commands' commands "$@"
+}
+(( $+functions[_stool__help__dotfile__keygen_commands] )) ||
+_stool__help__dotfile__keygen_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help dotfile keygen commands' commands "$@"
+}
+(( $+functions[_stool__help__dotfile__managed_commands] )) ||
+_stool__help__dotfile__managed_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help dotfile managed commands' commands "$@"
+}
+(( $+functions[_stool__help__dotfile__status_commands] )) ||
+_stool__help__dotfile__status_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help dotfile status commands' commands "$@"
+}
+(( $+functions[_stool__help__dotfile__unmanaged_commands] )) ||
+_stool__help__dotfile__unmanaged_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help dotfile unmanaged commands' commands "$@"
+}
+(( $+functions[_stool__help__dotfile__update_commands] )) ||
+_stool__help__dotfile__update_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help dotfile update commands' commands "$@"
+}
+(( $+functions[_stool__help__dotfile__verify_commands] )) ||
+_stool__help__dotfile__verify_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help dotfile verify commands' commands "$@"
+}
+(( $+functions[_stool__help__help_commands] )) ||
+_stool__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help help commands' commands "$@"
+}
+(( $+functions[_stool__help__init_commands] )) ||
+_stool__help__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help init commands' commands "$@"
+}
+(( $+functions[_stool__help__man_commands] )) ||
+_stool__help__man_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help man commands' commands "$@"
+}
+(( $+functions[_stool__help__secrets_commands] )) ||
+_stool__help__secrets_commands() {
+    local commands; commands=(
+'backup:Create one password-encrypted offline key backup outside Git workspaces' \
+'restore:Validate and manually restore an offline key backup' \
+    )
+    _describe -t commands 'stool help secrets commands' commands "$@"
+}
+(( $+functions[_stool__help__secrets__backup_commands] )) ||
+_stool__help__secrets__backup_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help secrets backup commands' commands "$@"
+}
+(( $+functions[_stool__help__secrets__restore_commands] )) ||
+_stool__help__secrets__restore_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool help secrets restore commands' commands "$@"
+}
+(( $+functions[_stool__init_commands] )) ||
+_stool__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool init commands' commands "$@"
+}
+(( $+functions[_stool__man_commands] )) ||
+_stool__man_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool man commands' commands "$@"
+}
+(( $+functions[_stool__secrets_commands] )) ||
+_stool__secrets_commands() {
+    local commands; commands=(
+'backup:Create one password-encrypted offline key backup outside Git workspaces' \
+'restore:Validate and manually restore an offline key backup' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'stool secrets commands' commands "$@"
+}
+(( $+functions[_stool__secrets__backup_commands] )) ||
+_stool__secrets__backup_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool secrets backup commands' commands "$@"
+}
+(( $+functions[_stool__secrets__help_commands] )) ||
+_stool__secrets__help_commands() {
+    local commands; commands=(
+'backup:Create one password-encrypted offline key backup outside Git workspaces' \
+'restore:Validate and manually restore an offline key backup' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'stool secrets help commands' commands "$@"
+}
+(( $+functions[_stool__secrets__help__backup_commands] )) ||
+_stool__secrets__help__backup_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool secrets help backup commands' commands "$@"
+}
+(( $+functions[_stool__secrets__help__help_commands] )) ||
+_stool__secrets__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool secrets help help commands' commands "$@"
+}
+(( $+functions[_stool__secrets__help__restore_commands] )) ||
+_stool__secrets__help__restore_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool secrets help restore commands' commands "$@"
+}
+(( $+functions[_stool__secrets__restore_commands] )) ||
+_stool__secrets__restore_commands() {
+    local commands; commands=()
+    _describe -t commands 'stool secrets restore commands' commands "$@"
+}
+
+if [ "$funcstack[1]" = "_stool" ]; then
+    _stool "$@"
+else
+    compdef _stool stool
+fi

@@ -1,0 +1,31 @@
+.ie \n(.g .ds Aq \(aq
+.el .ds Aq '
+.TH stool-init 1  "stool-init "
+.SH NAME
+stool\-init \- Save dotfiles defaults, initialize Apple settings and optionally restore offline keys
+.SH SYNOPSIS
+\fBstool\-init\fR [\fB\-\-dotfile\-url\fR] [\fB\-\-key\-file\fR] [\fB\-\-brewfile\fR] [\fB\-\-dry\-run\fR] [\fB\-\-non\-interactive\fR] [\fB\-\-passphrase\-file\fR] [\fB\-h\fR|\fB\-\-help\fR]
+.SH DESCRIPTION
+Save dotfiles defaults, initialize Apple settings and optionally restore offline keys
+.SH OPTIONS
+.TP
+\fB\-\-dotfile\-url\fR \fI<URL>\fR
+Default Git URL; saved without cloning or contacting the repository
+.TP
+\fB\-\-key\-file\fR \fI<FILE>\fR
+Password\-encrypted offline archive produced by stool secrets backup
+.TP
+\fB\-\-brewfile\fR \fI<FILE>\fR
+Trusted local Brewfile (defaults to ~/.Brewfile; missing default is skipped)
+.TP
+\fB\-\-dry\-run\fR
+Preview without saving configuration, decrypting keys or changing the system
+.TP
+\fB\-\-non\-interactive\fR
+Allow package installation without terminal input; prepare privileges separately
+.TP
+\fB\-\-passphrase\-file\fR \fI<FILE>\fR
+Private external backup password file (requires \-\-key\-file)
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Print help

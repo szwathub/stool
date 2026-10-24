@@ -1,0 +1,22 @@
+.ie \n(.g .ds Aq \(aq
+.el .ds Aq '
+.TH stool-apple-brew-install 1  "stool-apple-brew-install "
+.SH NAME
+stool\-apple\-brew\-install \- Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades
+.SH SYNOPSIS
+\fBstool\-apple\-brew\-install\fR [\fB\-\-file\fR] [\fB\-\-dry\-run\fR] [\fB\-\-non\-interactive\fR] [\fB\-h\fR|\fB\-\-help\fR]
+.SH DESCRIPTION
+Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades
+.SH OPTIONS
+.TP
+\fB\-\-file\fR \fI<FILE>\fR
+Trusted Brewfile to install (defaults to ~/.Brewfile)
+.TP
+\fB\-\-dry\-run\fR
+Show the plan without downloading, installing or evaluating the Brewfile
+.TP
+\fB\-\-non\-interactive\fR
+Run without terminal input (requires privileges to be prepared separately)
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Print help

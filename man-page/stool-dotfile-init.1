@@ -1,0 +1,31 @@
+.ie \n(.g .ds Aq \(aq
+.el .ds Aq '
+.TH stool-dotfile-init 1  "stool-dotfile-init "
+.SH NAME
+stool\-dotfile\-init \- Clone a Git URL and save configuration
+.SH SYNOPSIS
+\fBstool\-dotfile\-init\fR [\fB\-\-branch\fR] [\fB\-\-apply\fR] [\fB\-\-recurse\-submodules\fR] [\fB\-\-no\-recurse\-submodules\fR] [\fB\-\-builtin\fR] [\fB\-h\fR|\fB\-\-help\fR] [\fIREPO\fR]
+.SH DESCRIPTION
+Clone a Git URL and save configuration
+.SH OPTIONS
+.TP
+\fB\-\-branch\fR \fI<BRANCH>\fR
+
+.TP
+\fB\-\-apply\fR
+Deploy after cloning
+.TP
+\fB\-\-recurse\-submodules\fR
+Explicitly enable recursive submodules (the default for new repositories)
+.TP
+\fB\-\-no\-recurse\-submodules\fR
+Disable recursive submodule initialization and subsequent updates
+.TP
+\fB\-\-builtin\fR
+Clone using the built\-in Git backend
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Print help
+.TP
+[\fIREPO\fR]
+Git URL (defaults to dotfile.url saved by stool init)

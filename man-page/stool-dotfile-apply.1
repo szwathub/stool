@@ -1,0 +1,26 @@
+.ie \n(.g .ds Aq \(aq
+.el .ds Aq '
+.TH stool-dotfile-apply 1  "stool-dotfile-apply "
+.SH NAME
+stool\-dotfile\-apply \- Deploy the local source repository
+.SH SYNOPSIS
+\fBstool\-dotfile\-apply\fR [\fB\-\-dry\-run\fR] [\fB\-\-force\fR] [\fB\-\-prompt\fR] [\fB\-h\fR|\fB\-\-help\fR]
+.SH DESCRIPTION
+Deploy the local source repository
+.SH OPTIONS
+.TP
+\fB\-\-dry\-run\fR
+
+.TP
+\fB\-\-force\fR
+Back up and overwrite conflicting destination entries
+.TP
+\fB\-\-prompt\fR \fI<PROMPT>\fR [default: auto]
+Interactive conflict handling (auto only prompts on a terminal)
+.br
+
+.br
+[\fIpossible values: \fRauto, always, never]
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Print help
