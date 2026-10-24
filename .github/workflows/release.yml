@@ -1,0 +1,254 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing signed master release tag (dispatch from master only)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+
+concurrency:
+  group: release-${{ github.event_name == 'workflow_dispatch' && format('refs/tags/{0}', inputs.tag) || github.ref }}
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+  RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+
+jobs:
+  validate:
+    runs-on: ubuntu-22.04
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
+      commit: ${{ steps.version.outputs.commit }}
+      tag_object: ${{ steps.version.outputs.tag_object }}
+    steps:
+      # Trust policy from master before checking out any tag-supplied code.
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate signed tag, master release provenance and completed CI
+        id: version
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/git-flow.py verify-tag --tag "$RELEASE_TAG"
+
+  check:
+    needs: validate
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, macos-latest, windows-2022]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.validate.outputs.commit }}
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test the Unix installer
+        if: runner.os != 'Windows'
+        run: python -m unittest discover -s tests/python -p 'test_installer.py' -v
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --locked --all-targets -- -D warnings
+      - run: cargo test --locked --all-targets
+      - name: Install GnuPG for disposable-key integration tests
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          case "$RUNNER_OS" in
+            Linux)
+              if ! command -v gpg >/dev/null 2>&1; then
+                sudo apt-get update && sudo apt-get install -y gnupg
+              fi
+              ;;
+            macOS)
+              # Refresh preinstalled GnuPG as well, so image snapshots do not
+              # pin native-key tests to an import bug fixed by Homebrew.
+              brew update
+              if brew list --versions gnupg >/dev/null 2>&1; then
+                brew upgrade gnupg
+              else
+                brew install gnupg
+              fi
+              ;;
+          esac
+      - name: Test native offline GPG and SSH backups with disposable keys
+        if: runner.os != 'Windows'
+        env:
+          STOOL_BIN: target/debug/stool
+        run: python -m unittest discover -s tests/python -p 'test_secrets_native.py' -v
+      - name: Check generated CLI assets
+        if: runner.os == 'macOS'
+        run: |
+          sh scripts/generate-cli-assets.sh
+          git diff --exit-code -- completions man-page
+          if [ -n "$(git status --porcelain --untracked-files=all -- completions man-page)" ]; then
+            git status --short --untracked-files=all -- completions man-page
+            exit 1
+          fi
+
+  msrv:
+    needs: validate
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.validate.outputs.commit }}
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: '1.74.0'
+      - run: cargo test --locked --all-targets
+
+  build:
+    needs: validate
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+          - os: ubuntu-22.04
+            target: x86_64-unknown-linux-musl
+          - os: ubuntu-22.04-arm
+            target: aarch64-unknown-linux-gnu
+          - os: macos-15-intel
+            target: x86_64-apple-darwin
+          - os: macos-14
+            target: aarch64-apple-darwin
+          - os: windows-2022
+            target: x86_64-pc-windows-msvc
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.validate.outputs.commit }}
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install musl build tools
+        if: matrix.target == 'x86_64-unknown-linux-musl'
+        run: sudo apt-get update && sudo apt-get install -y musl-tools
+      - name: Build locked release binary
+        run: cargo build --locked --release --target ${{ matrix.target }}
+      - name: Check the packaged CLI version and dotfile entry point
+        shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+          VERSION: ${{ needs.validate.outputs.version }}
+        run: |
+          binary="target/$TARGET/release/stool"
+          case "$TARGET" in *-windows-*) binary="$binary.exe" ;; esac
+          test "$("$binary" --version)" = "stool $VERSION"
+          "$binary" init --help
+          "$binary" dotfile init --help
+          "$binary" secrets backup --help
+          "$binary" secrets restore --help
+      - name: Package release
+        shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+        run: |
+          python scripts/package-release.py --target "$TARGET" --tag "$RELEASE_TAG" --output artifacts
+      - name: Verify fresh Linux initialization, deployment and staged key recovery
+        if: matrix.target == 'x86_64-unknown-linux-gnu' && needs.validate.outputs.prerelease == 'false'
+        shell: bash
+        run: python scripts/verify-release.py --tag "$RELEASE_TAG" --binary target/x86_64-unknown-linux-gnu/release/stool
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stool-${{ matrix.target }}
+          path: artifacts/*
+          if-no-files-found: error
+
+  release:
+    needs: [validate, check, msrv, build]
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+      actions: read
+      pull-requests: read
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Recheck tag identity and release eligibility before publication
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          EXPECTED_COMMIT: ${{ needs.validate.outputs.commit }}
+          EXPECTED_OBJECT: ${{ needs.validate.outputs.tag_object }}
+        run: python scripts/git-flow.py verify-tag --tag "$RELEASE_TAG" --expected-commit "$EXPECTED_COMMIT" --expected-object "$EXPECTED_OBJECT"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.validate.outputs.commit }}
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: stool-*
+          path: artifacts
+          merge-multiple: true
+      - name: Validate every platform artifact and create checksums
+        shell: bash
+        run: |
+          test "$(find artifacts -maxdepth 1 -type f | wc -l)" -eq 6
+          for target in x86_64-unknown-linux-gnu x86_64-unknown-linux-musl aarch64-unknown-linux-gnu x86_64-apple-darwin aarch64-apple-darwin x86_64-pc-windows-msvc; do
+            suffix=tar.gz
+            case "$target" in *-windows-*) suffix=zip ;; esac
+            test -s "artifacts/stool-$RELEASE_TAG-$target.$suffix"
+          done
+          cd artifacts
+          sha256sum *.tar.gz *.zip | sort -k2 > SHA256SUMS.txt
+          sha256sum --check SHA256SUMS.txt
+      - name: Create version-specific release notes
+        shell: bash
+        run: |
+          python3 - <<'PYTHON'
+          import os, re
+          from pathlib import Path
+          tag = os.environ['RELEASE_TAG']
+          sections = re.split(r'(?m)^# ', Path('RELEASE_NOTES.md').read_text())
+          matching = [section for section in sections if section.splitlines() and section.splitlines()[0] == 'stool ' + tag]
+          if len(matching) != 1:
+              raise SystemExit(f'Expected exactly one stool release notes section for {tag}')
+          Path('release-notes.md').write_text('# ' + matching[0])
+          PYTHON
+      - name: Publish release after all checks and uploads succeed
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          files: artifacts/*
+          fail_on_unmatched_files: true
+          body_path: release-notes.md
+          generate_release_notes: true
+          prerelease: ${{ needs.validate.outputs.prerelease == 'true' }}
+          make_latest: ${{ needs.validate.outputs.prerelease == 'false' }}
+      - name: Verify the published installer and complete new-machine workflow
+        if: needs.validate.outputs.prerelease == 'false'
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python3 scripts/verify-release.py --tag "$RELEASE_TAG"
