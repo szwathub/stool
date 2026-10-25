@@ -52,7 +52,9 @@ fn template_directives_and_source_root_version() {
     let bytes = fs::read(s.destination.join(".config")).unwrap();
     let text = String::from_utf16(
         &bytes
-            .chunks_exact(2)
+            .as_chunks::<2>()
+            .0
+            .iter()
             .map(|p| u16::from_le_bytes([p[0], p[1]]))
             .collect::<Vec<_>>(),
     )
