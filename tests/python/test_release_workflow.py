@@ -112,7 +112,7 @@ class ReleaseWiringTests(unittest.TestCase):
         self.assertIn('tag: ${{ env.RELEASE_TAG }}', drafter)
         self.assertIn('commitish: ${{ needs.style.outputs.commit }}', drafter)
         self.assertIn('dry-run: true', drafter)
-        self.assertIn('body: ${{ steps.notes.outputs.body }}', release)
+        self.assertIn('|| steps.notes.outputs.body }}', release)
         self.assertIn('generate_release_notes: false', release)
         self.assertLess(publish.index('Verify archives and create checksums'),
                         publish.index('uses: release-drafter/release-drafter@v7'))
@@ -122,6 +122,20 @@ class ReleaseWiringTests(unittest.TestCase):
         self.assertNotIn('body_path:', WORKFLOW)
         self.assertNotIn('actions/setup-python@', WORKFLOW)
         self.assertNotRegex(publish, r'\bpython(?:3)?\b')
+
+    def test_first_stable_release_uses_explicit_notes_and_later_versions_use_drafter(self):
+        publish = job('publish')
+        steps = publish.split('\n      - ')
+        drafter = next(step for step in steps
+                       if 'uses: release-drafter/release-drafter@v7' in step)
+        release = next(step for step in steps
+                       if 'uses: softprops/action-gh-release@v2' in step)
+        self.assertIn("if: env.RELEASE_TAG != 'v1.0.0'", drafter)
+        self.assertIn(
+            "body: ${{ env.RELEASE_TAG == 'v1.0.0' && "
+            "'首次正式发布 stool 1.0.0。' || steps.notes.outputs.body }}", release)
+        self.assertNotIn('if:', release)
+        self.assertIn('generate_release_notes: false', release)
 
     def test_notes_use_a_previous_stable_release_even_for_prereleases_and_retries(self):
         drafter = next(step for step in job('publish').split('\n      - ')

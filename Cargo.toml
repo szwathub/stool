@@ -1,6 +1,6 @@
 [package]
 name = "stool"
-version = "0.7.1"
+version = "1.0.0"
 edition = "2021"
 authors = ["Zhiwei Sun <szwathub@gmail.com>"]
 license = "MIT"
