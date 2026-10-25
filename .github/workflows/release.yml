@@ -103,7 +103,7 @@ jobs:
           archive: stool-$tag-$target
           ref: refs/tags/${{ env.RELEASE_TAG }}
           leading-dir: true
-          include: README.md,RELEASE_NOTES.md,LICENSE,completions${{ runner.os != 'Windows' && ',man-page' || '' }}
+          include: README.md,LICENSE,completions${{ runner.os != 'Windows' && ',man-page' || '' }}
           locked: true
           build-tool: cargo
           tar: unix

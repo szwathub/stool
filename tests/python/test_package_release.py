@@ -67,7 +67,7 @@ class PackagingIntegrationTests(unittest.TestCase):
             'archive': 'stool-$tag-$target',
             'ref': 'refs/tags/${{ env.RELEASE_TAG }}',
             'leading-dir': 'true',
-            'include': "README.md,RELEASE_NOTES.md,LICENSE,completions${{ runner.os != 'Windows' && ',man-page' || '' }}",
+            'include': "README.md,LICENSE,completions${{ runner.os != 'Windows' && ',man-page' || '' }}",
             'locked': 'true',
             'build-tool': 'cargo',
             'tar': 'unix',
@@ -135,7 +135,6 @@ class ChecksumTests(unittest.TestCase):
             files = {
                 'stool.exe' if windows else 'stool': f'binary for {target}'.encode(),
                 'README.md': b'Project documentation',
-                'RELEASE_NOTES.md': b'# stool v1.2.3',
                 'LICENSE': b'License',
                 'completions/stool.bash': b'Generated Bash completion',
             }
