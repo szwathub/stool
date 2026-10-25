@@ -102,7 +102,7 @@ class PackagingIntegrationTests(unittest.TestCase):
         self.assertIn('permissions:\n  contents: read', WORKFLOW)
         publish = job('publish')
         self.assertEqual(fields(publish, 4)['needs'], '[style, build]')
-        self.assertNotIn('if:', publish)
+        self.assertNotRegex(publish, r'(?m)^    if:')
         self.assertEqual(WORKFLOW.count('uses: softprops/action-gh-release@'), 1)
         self.assertIn('uses: softprops/action-gh-release@v2', publish)
         self.assertIn('files: artifacts/*', publish)

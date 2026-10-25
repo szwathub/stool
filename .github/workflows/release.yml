@@ -150,6 +150,7 @@ jobs:
           sha256sum *.tar.gz *.zip | sort -k2 > SHA256SUMS.txt
           sha256sum --check SHA256SUMS.txt
       - name: Generate release notes
+        if: env.RELEASE_TAG != 'v1.0.0'
         id: notes
         uses: release-drafter/release-drafter@v7
         with:
@@ -164,7 +165,7 @@ jobs:
           tag_name: ${{ env.RELEASE_TAG }}
           files: artifacts/*
           fail_on_unmatched_files: true
-          body: ${{ steps.notes.outputs.body }}
+          body: ${{ env.RELEASE_TAG == 'v1.0.0' && '首次正式发布 stool 1.0.0。' || steps.notes.outputs.body }}
           generate_release_notes: false
           prerelease: ${{ contains(env.RELEASE_TAG, '-') }}
           make_latest: ${{ !contains(env.RELEASE_TAG, '-') }}
