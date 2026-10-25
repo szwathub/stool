@@ -1,5 +1,6 @@
 # Rust
 /target/
+/artifacts/
 **/*.rs.bk
 __pycache__/
 *.pyc
