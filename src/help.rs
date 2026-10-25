@@ -19,7 +19,7 @@ pub fn man(directory: Option<&Path>) -> Result<()> {
     }
     Ok(())
 }
-fn write_man(command: &clap::Command, name: &str, directory: &Path) -> Result<()> {
+pub(crate) fn write_man(command: &clap::Command, name: &str, directory: &Path) -> Result<()> {
     let mut bytes = Vec::new();
     clap_mangen::Man::new(command.clone().name(name.to_owned())).render(&mut bytes)?;
     let text = String::from_utf8(bytes)?;

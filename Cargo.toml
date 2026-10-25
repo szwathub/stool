@@ -2,10 +2,10 @@
 name = "stool"
 version = "0.7.1"
 edition = "2021"
-rust-version = "1.74"
 authors = ["Zhiwei Sun <szwathub@gmail.com>"]
 license = "MIT"
 repository = "https://github.com/szwathub/stool"
+build = "build.rs"
 
 [[bin]]
 name = "stool"
@@ -47,11 +47,16 @@ gix = { version = "=0.63.0", default-features = false, features = ["blocking-htt
 ratatui = { version = "=0.26.3", default-features = false, features = ["crossterm"] }
 crossterm = "0.27"
 
+[build-dependencies]
+anyhow = "1.0"
+clap = { version = "4.5", features = ["derive", "string"] }
+clap_complete = "4.4"
+clap_mangen = "0.2"
+
 [target.'cfg(windows)'.dependencies]
 dunce = "=1.0.5"
 windows-sys = { version = "=0.48.0", features = ["Win32_Foundation", "Win32_System_Console"] }
 
-# Commit Cargo.lock: several upstream MSRV declarations are incomplete; CI tests Rust 1.74.
 [target.'cfg(unix)'.dev-dependencies]
 libc = "0.2"
 

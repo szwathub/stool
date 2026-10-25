@@ -28,11 +28,11 @@ Register-ArgumentCompleter -Native -CommandName 'stool' -ScriptBlock {
             [CompletionResult]::new('-V', '-V ', [CompletionResultType]::ParameterName, 'Print version')
             [CompletionResult]::new('--version', '--version', [CompletionResultType]::ParameterName, 'Print version')
             [CompletionResult]::new('init', 'init', [CompletionResultType]::ParameterValue, 'Save dotfiles defaults, initialize Apple settings and optionally restore offline keys')
-            [CompletionResult]::new('apple', 'apple', [CompletionResultType]::ParameterValue, 'Manage macOS preferences and Homebrew independently of dotfiles')
             [CompletionResult]::new('dotfile', 'dotfile', [CompletionResultType]::ParameterValue, 'Manage dotfiles from a Git repository')
             [CompletionResult]::new('secrets', 'secrets', [CompletionResultType]::ParameterValue, 'Back up and restore GPG and SSH keys independently of dotfiles')
             [CompletionResult]::new('completions', 'completions', [CompletionResultType]::ParameterValue, 'Generate shell completions from the current command definitions')
             [CompletionResult]::new('man', 'man', [CompletionResultType]::ParameterValue, 'Render the manual, or write all command manuals to a directory')
+            [CompletionResult]::new('apple', 'apple', [CompletionResultType]::ParameterValue, 'Manage macOS preferences and Homebrew independently of dotfiles')
             [CompletionResult]::new('help', 'help', [CompletionResultType]::ParameterValue, 'Print this message or the help of the given subcommand(s)')
             break
         }
@@ -47,94 +47,6 @@ Register-ArgumentCompleter -Native -CommandName 'stool' -ScriptBlock {
             [CompletionResult]::new('--verbose', '--verbose', [CompletionResultType]::ParameterName, 'Show more debugging information')
             [CompletionResult]::new('-h', '-h', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('--help', '--help', [CompletionResultType]::ParameterName, 'Print help')
-            break
-        }
-        'stool;apple' {
-            [CompletionResult]::new('-v', '-v', [CompletionResultType]::ParameterName, 'Show more debugging information')
-            [CompletionResult]::new('--verbose', '--verbose', [CompletionResultType]::ParameterName, 'Show more debugging information')
-            [CompletionResult]::new('-h', '-h', [CompletionResultType]::ParameterName, 'Print help')
-            [CompletionResult]::new('--help', '--help', [CompletionResultType]::ParameterName, 'Print help')
-            [CompletionResult]::new('init', 'init', [CompletionResultType]::ParameterValue, 'Set the current user''s Dock minimization animation to suck')
-            [CompletionResult]::new('brew', 'brew', [CompletionResultType]::ParameterValue, 'Initialize Homebrew and install software from a Brewfile')
-            [CompletionResult]::new('help', 'help', [CompletionResultType]::ParameterValue, 'Print this message or the help of the given subcommand(s)')
-            break
-        }
-        'stool;apple;init' {
-            [CompletionResult]::new('--dry-run', '--dry-run', [CompletionResultType]::ParameterName, 'Show current preferences and planned changes without writing')
-            [CompletionResult]::new('-v', '-v', [CompletionResultType]::ParameterName, 'Show more debugging information')
-            [CompletionResult]::new('--verbose', '--verbose', [CompletionResultType]::ParameterName, 'Show more debugging information')
-            [CompletionResult]::new('-h', '-h', [CompletionResultType]::ParameterName, 'Print help')
-            [CompletionResult]::new('--help', '--help', [CompletionResultType]::ParameterName, 'Print help')
-            break
-        }
-        'stool;apple;brew' {
-            [CompletionResult]::new('--prefix', '--prefix', [CompletionResultType]::ParameterName, 'Select a Homebrew prefix instead of HOMEBREW_PREFIX, PATH or the native default')
-            [CompletionResult]::new('-v', '-v', [CompletionResultType]::ParameterName, 'Show more debugging information')
-            [CompletionResult]::new('--verbose', '--verbose', [CompletionResultType]::ParameterName, 'Show more debugging information')
-            [CompletionResult]::new('-h', '-h', [CompletionResultType]::ParameterName, 'Print help')
-            [CompletionResult]::new('--help', '--help', [CompletionResultType]::ParameterName, 'Print help')
-            [CompletionResult]::new('init', 'init', [CompletionResultType]::ParameterValue, 'Reuse Homebrew or install it with the official installer')
-            [CompletionResult]::new('install', 'install', [CompletionResultType]::ParameterValue, 'Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades')
-            [CompletionResult]::new('help', 'help', [CompletionResultType]::ParameterValue, 'Print this message or the help of the given subcommand(s)')
-            break
-        }
-        'stool;apple;brew;init' {
-            [CompletionResult]::new('--prefix', '--prefix', [CompletionResultType]::ParameterName, 'Select a Homebrew prefix instead of HOMEBREW_PREFIX, PATH or the native default')
-            [CompletionResult]::new('--dry-run', '--dry-run', [CompletionResultType]::ParameterName, 'Show the plan without downloading, installing or evaluating the Brewfile')
-            [CompletionResult]::new('--non-interactive', '--non-interactive', [CompletionResultType]::ParameterName, 'Run without terminal input (requires privileges to be prepared separately)')
-            [CompletionResult]::new('-v', '-v', [CompletionResultType]::ParameterName, 'Show more debugging information')
-            [CompletionResult]::new('--verbose', '--verbose', [CompletionResultType]::ParameterName, 'Show more debugging information')
-            [CompletionResult]::new('-h', '-h', [CompletionResultType]::ParameterName, 'Print help')
-            [CompletionResult]::new('--help', '--help', [CompletionResultType]::ParameterName, 'Print help')
-            break
-        }
-        'stool;apple;brew;install' {
-            [CompletionResult]::new('--file', '--file', [CompletionResultType]::ParameterName, 'Trusted Brewfile to install (defaults to ~/.Brewfile)')
-            [CompletionResult]::new('--prefix', '--prefix', [CompletionResultType]::ParameterName, 'Select a Homebrew prefix instead of HOMEBREW_PREFIX, PATH or the native default')
-            [CompletionResult]::new('--dry-run', '--dry-run', [CompletionResultType]::ParameterName, 'Show the plan without downloading, installing or evaluating the Brewfile')
-            [CompletionResult]::new('--non-interactive', '--non-interactive', [CompletionResultType]::ParameterName, 'Run without terminal input (requires privileges to be prepared separately)')
-            [CompletionResult]::new('-v', '-v', [CompletionResultType]::ParameterName, 'Show more debugging information')
-            [CompletionResult]::new('--verbose', '--verbose', [CompletionResultType]::ParameterName, 'Show more debugging information')
-            [CompletionResult]::new('-h', '-h', [CompletionResultType]::ParameterName, 'Print help')
-            [CompletionResult]::new('--help', '--help', [CompletionResultType]::ParameterName, 'Print help')
-            break
-        }
-        'stool;apple;brew;help' {
-            [CompletionResult]::new('init', 'init', [CompletionResultType]::ParameterValue, 'Reuse Homebrew or install it with the official installer')
-            [CompletionResult]::new('install', 'install', [CompletionResultType]::ParameterValue, 'Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades')
-            [CompletionResult]::new('help', 'help', [CompletionResultType]::ParameterValue, 'Print this message or the help of the given subcommand(s)')
-            break
-        }
-        'stool;apple;brew;help;init' {
-            break
-        }
-        'stool;apple;brew;help;install' {
-            break
-        }
-        'stool;apple;brew;help;help' {
-            break
-        }
-        'stool;apple;help' {
-            [CompletionResult]::new('init', 'init', [CompletionResultType]::ParameterValue, 'Set the current user''s Dock minimization animation to suck')
-            [CompletionResult]::new('brew', 'brew', [CompletionResultType]::ParameterValue, 'Initialize Homebrew and install software from a Brewfile')
-            [CompletionResult]::new('help', 'help', [CompletionResultType]::ParameterValue, 'Print this message or the help of the given subcommand(s)')
-            break
-        }
-        'stool;apple;help;init' {
-            break
-        }
-        'stool;apple;help;brew' {
-            [CompletionResult]::new('init', 'init', [CompletionResultType]::ParameterValue, 'Reuse Homebrew or install it with the official installer')
-            [CompletionResult]::new('install', 'install', [CompletionResultType]::ParameterValue, 'Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades')
-            break
-        }
-        'stool;apple;help;brew;init' {
-            break
-        }
-        'stool;apple;help;brew;install' {
-            break
-        }
-        'stool;apple;help;help' {
             break
         }
         'stool;dotfile' {
@@ -479,36 +391,105 @@ Register-ArgumentCompleter -Native -CommandName 'stool' -ScriptBlock {
             [CompletionResult]::new('--help', '--help', [CompletionResultType]::ParameterName, 'Print help')
             break
         }
-        'stool;help' {
-            [CompletionResult]::new('init', 'init', [CompletionResultType]::ParameterValue, 'Save dotfiles defaults, initialize Apple settings and optionally restore offline keys')
-            [CompletionResult]::new('apple', 'apple', [CompletionResultType]::ParameterValue, 'Manage macOS preferences and Homebrew independently of dotfiles')
-            [CompletionResult]::new('dotfile', 'dotfile', [CompletionResultType]::ParameterValue, 'Manage dotfiles from a Git repository')
-            [CompletionResult]::new('secrets', 'secrets', [CompletionResultType]::ParameterValue, 'Back up and restore GPG and SSH keys independently of dotfiles')
-            [CompletionResult]::new('completions', 'completions', [CompletionResultType]::ParameterValue, 'Generate shell completions from the current command definitions')
-            [CompletionResult]::new('man', 'man', [CompletionResultType]::ParameterValue, 'Render the manual, or write all command manuals to a directory')
+        'stool;apple' {
+            [CompletionResult]::new('-v', '-v', [CompletionResultType]::ParameterName, 'Show more debugging information')
+            [CompletionResult]::new('--verbose', '--verbose', [CompletionResultType]::ParameterName, 'Show more debugging information')
+            [CompletionResult]::new('-h', '-h', [CompletionResultType]::ParameterName, 'Print help')
+            [CompletionResult]::new('--help', '--help', [CompletionResultType]::ParameterName, 'Print help')
+            [CompletionResult]::new('init', 'init', [CompletionResultType]::ParameterValue, 'Set the current user''s Dock minimization animation to suck')
+            [CompletionResult]::new('brew', 'brew', [CompletionResultType]::ParameterValue, 'Initialize Homebrew and install software from a Brewfile')
             [CompletionResult]::new('help', 'help', [CompletionResultType]::ParameterValue, 'Print this message or the help of the given subcommand(s)')
             break
         }
-        'stool;help;init' {
+        'stool;apple;init' {
+            [CompletionResult]::new('--dry-run', '--dry-run', [CompletionResultType]::ParameterName, 'Show current preferences and planned changes without writing')
+            [CompletionResult]::new('-v', '-v', [CompletionResultType]::ParameterName, 'Show more debugging information')
+            [CompletionResult]::new('--verbose', '--verbose', [CompletionResultType]::ParameterName, 'Show more debugging information')
+            [CompletionResult]::new('-h', '-h', [CompletionResultType]::ParameterName, 'Print help')
+            [CompletionResult]::new('--help', '--help', [CompletionResultType]::ParameterName, 'Print help')
             break
         }
-        'stool;help;apple' {
+        'stool;apple;brew' {
+            [CompletionResult]::new('--prefix', '--prefix', [CompletionResultType]::ParameterName, 'Select a Homebrew prefix instead of HOMEBREW_PREFIX, PATH or the native default')
+            [CompletionResult]::new('-v', '-v', [CompletionResultType]::ParameterName, 'Show more debugging information')
+            [CompletionResult]::new('--verbose', '--verbose', [CompletionResultType]::ParameterName, 'Show more debugging information')
+            [CompletionResult]::new('-h', '-h', [CompletionResultType]::ParameterName, 'Print help')
+            [CompletionResult]::new('--help', '--help', [CompletionResultType]::ParameterName, 'Print help')
+            [CompletionResult]::new('init', 'init', [CompletionResultType]::ParameterValue, 'Reuse Homebrew or install it with the official installer')
+            [CompletionResult]::new('install', 'install', [CompletionResultType]::ParameterValue, 'Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades')
+            [CompletionResult]::new('help', 'help', [CompletionResultType]::ParameterValue, 'Print this message or the help of the given subcommand(s)')
+            break
+        }
+        'stool;apple;brew;init' {
+            [CompletionResult]::new('--prefix', '--prefix', [CompletionResultType]::ParameterName, 'Select a Homebrew prefix instead of HOMEBREW_PREFIX, PATH or the native default')
+            [CompletionResult]::new('--dry-run', '--dry-run', [CompletionResultType]::ParameterName, 'Show the plan without downloading, installing or evaluating the Brewfile')
+            [CompletionResult]::new('--non-interactive', '--non-interactive', [CompletionResultType]::ParameterName, 'Run without terminal input (requires privileges to be prepared separately)')
+            [CompletionResult]::new('-v', '-v', [CompletionResultType]::ParameterName, 'Show more debugging information')
+            [CompletionResult]::new('--verbose', '--verbose', [CompletionResultType]::ParameterName, 'Show more debugging information')
+            [CompletionResult]::new('-h', '-h', [CompletionResultType]::ParameterName, 'Print help')
+            [CompletionResult]::new('--help', '--help', [CompletionResultType]::ParameterName, 'Print help')
+            break
+        }
+        'stool;apple;brew;install' {
+            [CompletionResult]::new('--file', '--file', [CompletionResultType]::ParameterName, 'Trusted Brewfile to install (defaults to ~/.Brewfile)')
+            [CompletionResult]::new('--prefix', '--prefix', [CompletionResultType]::ParameterName, 'Select a Homebrew prefix instead of HOMEBREW_PREFIX, PATH or the native default')
+            [CompletionResult]::new('--dry-run', '--dry-run', [CompletionResultType]::ParameterName, 'Show the plan without downloading, installing or evaluating the Brewfile')
+            [CompletionResult]::new('--non-interactive', '--non-interactive', [CompletionResultType]::ParameterName, 'Run without terminal input (requires privileges to be prepared separately)')
+            [CompletionResult]::new('-v', '-v', [CompletionResultType]::ParameterName, 'Show more debugging information')
+            [CompletionResult]::new('--verbose', '--verbose', [CompletionResultType]::ParameterName, 'Show more debugging information')
+            [CompletionResult]::new('-h', '-h', [CompletionResultType]::ParameterName, 'Print help')
+            [CompletionResult]::new('--help', '--help', [CompletionResultType]::ParameterName, 'Print help')
+            break
+        }
+        'stool;apple;brew;help' {
+            [CompletionResult]::new('init', 'init', [CompletionResultType]::ParameterValue, 'Reuse Homebrew or install it with the official installer')
+            [CompletionResult]::new('install', 'install', [CompletionResultType]::ParameterValue, 'Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades')
+            [CompletionResult]::new('help', 'help', [CompletionResultType]::ParameterValue, 'Print this message or the help of the given subcommand(s)')
+            break
+        }
+        'stool;apple;brew;help;init' {
+            break
+        }
+        'stool;apple;brew;help;install' {
+            break
+        }
+        'stool;apple;brew;help;help' {
+            break
+        }
+        'stool;apple;help' {
             [CompletionResult]::new('init', 'init', [CompletionResultType]::ParameterValue, 'Set the current user''s Dock minimization animation to suck')
             [CompletionResult]::new('brew', 'brew', [CompletionResultType]::ParameterValue, 'Initialize Homebrew and install software from a Brewfile')
+            [CompletionResult]::new('help', 'help', [CompletionResultType]::ParameterValue, 'Print this message or the help of the given subcommand(s)')
             break
         }
-        'stool;help;apple;init' {
+        'stool;apple;help;init' {
             break
         }
-        'stool;help;apple;brew' {
+        'stool;apple;help;brew' {
             [CompletionResult]::new('init', 'init', [CompletionResultType]::ParameterValue, 'Reuse Homebrew or install it with the official installer')
             [CompletionResult]::new('install', 'install', [CompletionResultType]::ParameterValue, 'Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades')
             break
         }
-        'stool;help;apple;brew;init' {
+        'stool;apple;help;brew;init' {
             break
         }
-        'stool;help;apple;brew;install' {
+        'stool;apple;help;brew;install' {
+            break
+        }
+        'stool;apple;help;help' {
+            break
+        }
+        'stool;help' {
+            [CompletionResult]::new('init', 'init', [CompletionResultType]::ParameterValue, 'Save dotfiles defaults, initialize Apple settings and optionally restore offline keys')
+            [CompletionResult]::new('dotfile', 'dotfile', [CompletionResultType]::ParameterValue, 'Manage dotfiles from a Git repository')
+            [CompletionResult]::new('secrets', 'secrets', [CompletionResultType]::ParameterValue, 'Back up and restore GPG and SSH keys independently of dotfiles')
+            [CompletionResult]::new('completions', 'completions', [CompletionResultType]::ParameterValue, 'Generate shell completions from the current command definitions')
+            [CompletionResult]::new('man', 'man', [CompletionResultType]::ParameterValue, 'Render the manual, or write all command manuals to a directory')
+            [CompletionResult]::new('apple', 'apple', [CompletionResultType]::ParameterValue, 'Manage macOS preferences and Homebrew independently of dotfiles')
+            [CompletionResult]::new('help', 'help', [CompletionResultType]::ParameterValue, 'Print this message or the help of the given subcommand(s)')
+            break
+        }
+        'stool;help;init' {
             break
         }
         'stool;help;dotfile' {
@@ -593,6 +574,25 @@ Register-ArgumentCompleter -Native -CommandName 'stool' -ScriptBlock {
             break
         }
         'stool;help;man' {
+            break
+        }
+        'stool;help;apple' {
+            [CompletionResult]::new('init', 'init', [CompletionResultType]::ParameterValue, 'Set the current user''s Dock minimization animation to suck')
+            [CompletionResult]::new('brew', 'brew', [CompletionResultType]::ParameterValue, 'Initialize Homebrew and install software from a Brewfile')
+            break
+        }
+        'stool;help;apple;init' {
+            break
+        }
+        'stool;help;apple;brew' {
+            [CompletionResult]::new('init', 'init', [CompletionResultType]::ParameterValue, 'Reuse Homebrew or install it with the official installer')
+            [CompletionResult]::new('install', 'install', [CompletionResultType]::ParameterValue, 'Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades')
+            break
+        }
+        'stool;help;apple;brew;init' {
+            break
+        }
+        'stool;help;apple;brew;install' {
             break
         }
         'stool;help;help' {

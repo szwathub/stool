@@ -25,11 +25,11 @@ set edit:completion:arg-completer[stool] = {|@words|
             cand -V 'Print version'
             cand --version 'Print version'
             cand init 'Save dotfiles defaults, initialize Apple settings and optionally restore offline keys'
-            cand apple 'Manage macOS preferences and Homebrew independently of dotfiles'
             cand dotfile 'Manage dotfiles from a Git repository'
             cand secrets 'Back up and restore GPG and SSH keys independently of dotfiles'
             cand completions 'Generate shell completions from the current command definitions'
             cand man 'Render the manual, or write all command manuals to a directory'
+            cand apple 'Manage macOS preferences and Homebrew independently of dotfiles'
             cand help 'Print this message or the help of the given subcommand(s)'
         }
         &'stool;init'= {
@@ -43,79 +43,6 @@ set edit:completion:arg-completer[stool] = {|@words|
             cand --verbose 'Show more debugging information'
             cand -h 'Print help'
             cand --help 'Print help'
-        }
-        &'stool;apple'= {
-            cand -v 'Show more debugging information'
-            cand --verbose 'Show more debugging information'
-            cand -h 'Print help'
-            cand --help 'Print help'
-            cand init 'Set the current user''s Dock minimization animation to suck'
-            cand brew 'Initialize Homebrew and install software from a Brewfile'
-            cand help 'Print this message or the help of the given subcommand(s)'
-        }
-        &'stool;apple;init'= {
-            cand --dry-run 'Show current preferences and planned changes without writing'
-            cand -v 'Show more debugging information'
-            cand --verbose 'Show more debugging information'
-            cand -h 'Print help'
-            cand --help 'Print help'
-        }
-        &'stool;apple;brew'= {
-            cand --prefix 'Select a Homebrew prefix instead of HOMEBREW_PREFIX, PATH or the native default'
-            cand -v 'Show more debugging information'
-            cand --verbose 'Show more debugging information'
-            cand -h 'Print help'
-            cand --help 'Print help'
-            cand init 'Reuse Homebrew or install it with the official installer'
-            cand install 'Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades'
-            cand help 'Print this message or the help of the given subcommand(s)'
-        }
-        &'stool;apple;brew;init'= {
-            cand --prefix 'Select a Homebrew prefix instead of HOMEBREW_PREFIX, PATH or the native default'
-            cand --dry-run 'Show the plan without downloading, installing or evaluating the Brewfile'
-            cand --non-interactive 'Run without terminal input (requires privileges to be prepared separately)'
-            cand -v 'Show more debugging information'
-            cand --verbose 'Show more debugging information'
-            cand -h 'Print help'
-            cand --help 'Print help'
-        }
-        &'stool;apple;brew;install'= {
-            cand --file 'Trusted Brewfile to install (defaults to ~/.Brewfile)'
-            cand --prefix 'Select a Homebrew prefix instead of HOMEBREW_PREFIX, PATH or the native default'
-            cand --dry-run 'Show the plan without downloading, installing or evaluating the Brewfile'
-            cand --non-interactive 'Run without terminal input (requires privileges to be prepared separately)'
-            cand -v 'Show more debugging information'
-            cand --verbose 'Show more debugging information'
-            cand -h 'Print help'
-            cand --help 'Print help'
-        }
-        &'stool;apple;brew;help'= {
-            cand init 'Reuse Homebrew or install it with the official installer'
-            cand install 'Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades'
-            cand help 'Print this message or the help of the given subcommand(s)'
-        }
-        &'stool;apple;brew;help;init'= {
-        }
-        &'stool;apple;brew;help;install'= {
-        }
-        &'stool;apple;brew;help;help'= {
-        }
-        &'stool;apple;help'= {
-            cand init 'Set the current user''s Dock minimization animation to suck'
-            cand brew 'Initialize Homebrew and install software from a Brewfile'
-            cand help 'Print this message or the help of the given subcommand(s)'
-        }
-        &'stool;apple;help;init'= {
-        }
-        &'stool;apple;help;brew'= {
-            cand init 'Reuse Homebrew or install it with the official installer'
-            cand install 'Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades'
-        }
-        &'stool;apple;help;brew;init'= {
-        }
-        &'stool;apple;help;brew;install'= {
-        }
-        &'stool;apple;help;help'= {
         }
         &'stool;dotfile'= {
             cand --source 'Local source repository (saved by init)'
@@ -415,30 +342,89 @@ set edit:completion:arg-completer[stool] = {|@words|
             cand -h 'Print help'
             cand --help 'Print help'
         }
+        &'stool;apple'= {
+            cand -v 'Show more debugging information'
+            cand --verbose 'Show more debugging information'
+            cand -h 'Print help'
+            cand --help 'Print help'
+            cand init 'Set the current user''s Dock minimization animation to suck'
+            cand brew 'Initialize Homebrew and install software from a Brewfile'
+            cand help 'Print this message or the help of the given subcommand(s)'
+        }
+        &'stool;apple;init'= {
+            cand --dry-run 'Show current preferences and planned changes without writing'
+            cand -v 'Show more debugging information'
+            cand --verbose 'Show more debugging information'
+            cand -h 'Print help'
+            cand --help 'Print help'
+        }
+        &'stool;apple;brew'= {
+            cand --prefix 'Select a Homebrew prefix instead of HOMEBREW_PREFIX, PATH or the native default'
+            cand -v 'Show more debugging information'
+            cand --verbose 'Show more debugging information'
+            cand -h 'Print help'
+            cand --help 'Print help'
+            cand init 'Reuse Homebrew or install it with the official installer'
+            cand install 'Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades'
+            cand help 'Print this message or the help of the given subcommand(s)'
+        }
+        &'stool;apple;brew;init'= {
+            cand --prefix 'Select a Homebrew prefix instead of HOMEBREW_PREFIX, PATH or the native default'
+            cand --dry-run 'Show the plan without downloading, installing or evaluating the Brewfile'
+            cand --non-interactive 'Run without terminal input (requires privileges to be prepared separately)'
+            cand -v 'Show more debugging information'
+            cand --verbose 'Show more debugging information'
+            cand -h 'Print help'
+            cand --help 'Print help'
+        }
+        &'stool;apple;brew;install'= {
+            cand --file 'Trusted Brewfile to install (defaults to ~/.Brewfile)'
+            cand --prefix 'Select a Homebrew prefix instead of HOMEBREW_PREFIX, PATH or the native default'
+            cand --dry-run 'Show the plan without downloading, installing or evaluating the Brewfile'
+            cand --non-interactive 'Run without terminal input (requires privileges to be prepared separately)'
+            cand -v 'Show more debugging information'
+            cand --verbose 'Show more debugging information'
+            cand -h 'Print help'
+            cand --help 'Print help'
+        }
+        &'stool;apple;brew;help'= {
+            cand init 'Reuse Homebrew or install it with the official installer'
+            cand install 'Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades'
+            cand help 'Print this message or the help of the given subcommand(s)'
+        }
+        &'stool;apple;brew;help;init'= {
+        }
+        &'stool;apple;brew;help;install'= {
+        }
+        &'stool;apple;brew;help;help'= {
+        }
+        &'stool;apple;help'= {
+            cand init 'Set the current user''s Dock minimization animation to suck'
+            cand brew 'Initialize Homebrew and install software from a Brewfile'
+            cand help 'Print this message or the help of the given subcommand(s)'
+        }
+        &'stool;apple;help;init'= {
+        }
+        &'stool;apple;help;brew'= {
+            cand init 'Reuse Homebrew or install it with the official installer'
+            cand install 'Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades'
+        }
+        &'stool;apple;help;brew;init'= {
+        }
+        &'stool;apple;help;brew;install'= {
+        }
+        &'stool;apple;help;help'= {
+        }
         &'stool;help'= {
             cand init 'Save dotfiles defaults, initialize Apple settings and optionally restore offline keys'
-            cand apple 'Manage macOS preferences and Homebrew independently of dotfiles'
             cand dotfile 'Manage dotfiles from a Git repository'
             cand secrets 'Back up and restore GPG and SSH keys independently of dotfiles'
             cand completions 'Generate shell completions from the current command definitions'
             cand man 'Render the manual, or write all command manuals to a directory'
+            cand apple 'Manage macOS preferences and Homebrew independently of dotfiles'
             cand help 'Print this message or the help of the given subcommand(s)'
         }
         &'stool;help;init'= {
-        }
-        &'stool;help;apple'= {
-            cand init 'Set the current user''s Dock minimization animation to suck'
-            cand brew 'Initialize Homebrew and install software from a Brewfile'
-        }
-        &'stool;help;apple;init'= {
-        }
-        &'stool;help;apple;brew'= {
-            cand init 'Reuse Homebrew or install it with the official installer'
-            cand install 'Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades'
-        }
-        &'stool;help;apple;brew;init'= {
-        }
-        &'stool;help;apple;brew;install'= {
         }
         &'stool;help;dotfile'= {
             cand init 'Clone a Git URL and save configuration'
@@ -501,6 +487,20 @@ set edit:completion:arg-completer[stool] = {|@words|
         &'stool;help;completions'= {
         }
         &'stool;help;man'= {
+        }
+        &'stool;help;apple'= {
+            cand init 'Set the current user''s Dock minimization animation to suck'
+            cand brew 'Initialize Homebrew and install software from a Brewfile'
+        }
+        &'stool;help;apple;init'= {
+        }
+        &'stool;help;apple;brew'= {
+            cand init 'Reuse Homebrew or install it with the official installer'
+            cand install 'Ensure Homebrew is available, then install a trusted Brewfile without routine upgrades'
+        }
+        &'stool;help;apple;brew;init'= {
+        }
+        &'stool;help;apple;brew;install'= {
         }
         &'stool;help;help'= {
         }

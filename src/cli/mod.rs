@@ -1,6 +1,6 @@
 //! Command and argument definitions; execution lives in the feature modules.
 
-#[cfg(target_os = "macos")]
+#[cfg_attr(not(target_os = "macos"), allow(dead_code))]
 pub mod apple;
 pub mod dotfile;
 pub mod init;
@@ -17,7 +17,7 @@ use clap::{Parser, Subcommand};
     color = clap::ColorChoice::Auto,
     args_conflicts_with_subcommands = false
 )]
-pub struct Cli {
+pub struct Definition<C: clap::Subcommand> {
     #[arg(
         short,
         long,
@@ -28,16 +28,22 @@ pub struct Cli {
     pub verbose: bool,
 
     #[command(subcommand)]
-    pub command: Commands,
+    pub command: C,
 }
+
+pub type Cli = Definition<Commands>;
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
-    Init(init::InitCommand),
-
+    #[command(flatten)]
+    Base(BaseCommands),
     #[cfg(target_os = "macos")]
     Apple(apple::AppleCommand),
+}
 
+#[derive(Subcommand, Debug)]
+pub enum BaseCommands {
+    Init(init::InitCommand),
     Dotfile(dotfile::DotfileCommand),
     Secrets(secrets::SecretsCommand),
     /// Generate shell completions from the current command definitions

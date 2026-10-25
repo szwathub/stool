@@ -19,13 +19,15 @@ fn main() {
 
 fn run(cli: Cli) -> anyhow::Result<()> {
     match cli.command {
-        cli::Commands::Init(cmd) => init::run(&cmd, cli.verbose)?,
         #[cfg(target_os = "macos")]
         cli::Commands::Apple(cmd) => apple::run(&cmd, cli.verbose)?,
-        cli::Commands::Dotfile(cmd) => dotfile::run(&cmd, cli.verbose)?,
-        cli::Commands::Secrets(cmd) => secrets::run(&cmd)?,
-        cli::Commands::Completions { shell } => help::completions(shell),
-        cli::Commands::Man { output } => help::man(output.as_deref())?,
+        cli::Commands::Base(command) => match command {
+            cli::BaseCommands::Init(cmd) => init::run(&cmd, cli.verbose)?,
+            cli::BaseCommands::Dotfile(cmd) => dotfile::run(&cmd, cli.verbose)?,
+            cli::BaseCommands::Secrets(cmd) => secrets::run(&cmd)?,
+            cli::BaseCommands::Completions { shell } => help::completions(shell),
+            cli::BaseCommands::Man { output } => help::man(output.as_deref())?,
+        },
     }
     Ok(())
 }

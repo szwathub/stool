@@ -123,7 +123,7 @@ pub fn ready_for(paths: &Paths) -> Result<()> {
         paths
             .config
             .as_ref()
-            .map_or(true, |config| config.recurse_submodules),
+            .is_none_or(|config| config.recurse_submodules),
     )
 }
 
@@ -157,7 +157,7 @@ pub fn initialize(paths: &Paths, args: &InitArgs) -> Result<()> {
     } else if args.recurse_submodules {
         true
     } else {
-        saved.map_or(true, |config| config.recurse_submodules)
+        saved.is_none_or(|config| config.recurse_submodules)
     };
     if let Some(branch) = &args.branch {
         if branch.starts_with('-') {

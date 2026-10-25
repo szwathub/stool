@@ -293,7 +293,7 @@ _stool() {
 
     case "${cmd}" in
         stool)
-            opts="-v -h -V --verbose --help --version init apple dotfile secrets completions man help"
+            opts="-v -h -V --verbose --help --version init dotfile secrets completions man apple help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -1269,7 +1269,7 @@ _stool() {
             return 0
             ;;
         stool__help)
-            opts="init apple dotfile secrets completions man help"
+            opts="init dotfile secrets completions man apple help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
