@@ -38,6 +38,7 @@ Register-ArgumentCompleter -Native -CommandName 'stool' -ScriptBlock {
         }
         'stool;init' {
             [CompletionResult]::new('--dotfile-url', '--dotfile-url', [CompletionResultType]::ParameterName, 'Default Git URL; saved without cloning or contacting the repository')
+            [CompletionResult]::new('--ssh-key', '--ssh-key', [CompletionResultType]::ParameterName, 'SSH private key to use for the dotfiles repository (saved after offline key recovery)')
             [CompletionResult]::new('--key-file', '--key-file', [CompletionResultType]::ParameterName, 'Password-encrypted offline archive produced by stool secrets backup')
             [CompletionResult]::new('--brewfile', '--brewfile', [CompletionResultType]::ParameterName, 'Trusted local Brewfile (defaults to ~/.Brewfile; missing default is skipped)')
             [CompletionResult]::new('--passphrase-file', '--passphrase-file', [CompletionResultType]::ParameterName, 'Private external backup password file (requires --key-file)')
@@ -77,6 +78,7 @@ Register-ArgumentCompleter -Native -CommandName 'stool' -ScriptBlock {
             break
         }
         'stool;dotfile;init' {
+            [CompletionResult]::new('--ssh-key', '--ssh-key', [CompletionResultType]::ParameterName, 'SSH private key (otherwise use saved identity, SSH configuration or discovered keys)')
             [CompletionResult]::new('--branch', '--branch', [CompletionResultType]::ParameterName, 'branch')
             [CompletionResult]::new('--source', '--source', [CompletionResultType]::ParameterName, 'Local source repository (saved by init)')
             [CompletionResult]::new('--destination', '--destination', [CompletionResultType]::ParameterName, 'Destination directory (defaults to the user''s home)')

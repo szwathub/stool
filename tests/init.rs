@@ -27,6 +27,8 @@ fn preview_validates_inputs_but_never_decrypts_contacts_or_saves() {
         .arg(&backup)
         .arg("--brewfile")
         .arg(&manifest)
+        .arg("--ssh-key")
+        .arg(s.home.join(".ssh/not-yet-restored"))
         .output()
         .unwrap();
     assert!(success(output).contains("backup not decrypted"));
@@ -119,7 +121,13 @@ fn dotfile_init_uses_global_url_preserves_explicit_override_and_persists_recursi
 fn init_help_exposes_new_options_and_rejects_obsolete_destructive_flags() {
     let s = Sandbox::new(&[("dot_seed", "seed")]);
     let help = success(command(&s).arg("--help").output().unwrap());
-    for option in ["--dotfile-url", "--key-file", "--brewfile", "--dry-run"] {
+    for option in [
+        "--dotfile-url",
+        "--key-file",
+        "--ssh-key",
+        "--brewfile",
+        "--dry-run",
+    ] {
         assert!(help.contains(option));
     }
     for option in ["--clean", "--force", "--key-path"] {
@@ -228,6 +236,8 @@ fn gpg_suite_version_is_reused_and_keys_restore_before_a_retryable_homebrew_fail
         .arg("--passphrase-file")
         .arg(&password)
         .arg("--non-interactive")
+        .arg("--ssh-key")
+        .arg(s.home.join(".ssh/custom"))
         .env("PATH", &bin)
         .env("STOOL_TEST_GPG_ROOT", &s.root)
         .env("HOMEBREW_PREFIX", &broken_brew)
@@ -247,6 +257,13 @@ fn gpg_suite_version_is_reused_and_keys_restore_before_a_retryable_homebrew_fail
             .count(),
         3
     );
-    assert!(s.home.join(".stool/config.toml").is_file());
+    let config: toml::Value = fs::read_to_string(s.home.join(".stool/config.toml"))
+        .unwrap()
+        .parse()
+        .unwrap();
+    assert_eq!(
+        config["dotfile"]["ssh_key"].as_str(),
+        s.home.join(".ssh/custom").to_str()
+    );
     assert!(!s.home.join(".stool/dotfile").exists());
 }

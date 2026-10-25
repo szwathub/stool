@@ -35,6 +35,7 @@ complete -c stool -n "__fish_stool_needs_command" -f -a "man" -d 'Render the man
 complete -c stool -n "__fish_stool_needs_command" -f -a "apple" -d 'Manage macOS preferences and Homebrew independently of dotfiles'
 complete -c stool -n "__fish_stool_needs_command" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c stool -n "__fish_stool_using_subcommand init" -l dotfile-url -d 'Default Git URL; saved without cloning or contacting the repository' -r
+complete -c stool -n "__fish_stool_using_subcommand init" -l ssh-key -d 'SSH private key to use for the dotfiles repository (saved after offline key recovery)' -r -F
 complete -c stool -n "__fish_stool_using_subcommand init" -l key-file -d 'Password-encrypted offline archive produced by stool secrets backup' -r -F
 complete -c stool -n "__fish_stool_using_subcommand init" -l brewfile -d 'Trusted local Brewfile (defaults to ~/.Brewfile; missing default is skipped)' -r -F
 complete -c stool -n "__fish_stool_using_subcommand init" -l passphrase-file -d 'Private external backup password file (requires --key-file)' -r -F
@@ -64,6 +65,7 @@ complete -c stool -n "__fish_stool_using_subcommand dotfile; and not __fish_seen
 complete -c stool -n "__fish_stool_using_subcommand dotfile; and not __fish_seen_subcommand_from init diff status apply update managed add edit unmanaged verify doctor archive execute-template data keygen cd help" -f -a "keygen" -d 'Generate an age identity and print its public recipient'
 complete -c stool -n "__fish_stool_using_subcommand dotfile; and not __fish_seen_subcommand_from init diff status apply update managed add edit unmanaged verify doctor archive execute-template data keygen cd help" -f -a "cd" -d 'Start a shell in the source repository, or print its path'
 complete -c stool -n "__fish_stool_using_subcommand dotfile; and not __fish_seen_subcommand_from init diff status apply update managed add edit unmanaged verify doctor archive execute-template data keygen cd help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
+complete -c stool -n "__fish_stool_using_subcommand dotfile; and __fish_seen_subcommand_from init" -l ssh-key -d 'SSH private key (otherwise use saved identity, SSH configuration or discovered keys)' -r -F
 complete -c stool -n "__fish_stool_using_subcommand dotfile; and __fish_seen_subcommand_from init" -l branch -r
 complete -c stool -n "__fish_stool_using_subcommand dotfile; and __fish_seen_subcommand_from init" -l source -d 'Local source repository (saved by init)' -r -F
 complete -c stool -n "__fish_stool_using_subcommand dotfile; and __fish_seen_subcommand_from init" -l destination -d 'Destination directory (defaults to the user\'s home)' -r -F

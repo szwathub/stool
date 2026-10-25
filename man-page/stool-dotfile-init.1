@@ -4,10 +4,13 @@
 .SH NAME
 stool\-dotfile\-init \- Clone a Git URL and save configuration
 .SH SYNOPSIS
-\fBstool\-dotfile\-init\fR [\fB\-\-branch\fR] [\fB\-\-apply\fR] [\fB\-\-recurse\-submodules\fR] [\fB\-\-no\-recurse\-submodules\fR] [\fB\-\-builtin\fR] [\fB\-h\fR|\fB\-\-help\fR] [\fIREPO\fR]
+\fBstool\-dotfile\-init\fR [\fB\-\-ssh\-key\fR] [\fB\-\-branch\fR] [\fB\-\-apply\fR] [\fB\-\-recurse\-submodules\fR] [\fB\-\-no\-recurse\-submodules\fR] [\fB\-\-builtin\fR] [\fB\-h\fR|\fB\-\-help\fR] [\fIREPO\fR]
 .SH DESCRIPTION
 Clone a Git URL and save configuration
 .SH OPTIONS
+.TP
+\fB\-\-ssh\-key\fR \fI<FILE>\fR
+SSH private key (otherwise use saved identity, SSH configuration or discovered keys)
 .TP
 \fB\-\-branch\fR \fI<BRANCH>\fR
 

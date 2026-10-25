@@ -9,6 +9,9 @@ pub struct InitCommand {
     /// Default Git URL; saved without cloning or contacting the repository
     #[arg(long, value_name = "URL")]
     pub dotfile_url: Option<String>,
+    /// SSH private key to use for the dotfiles repository (saved after offline key recovery)
+    #[arg(long, value_name = "FILE")]
+    pub ssh_key: Option<PathBuf>,
     /// Password-encrypted offline archive produced by stool secrets backup
     #[arg(long, value_name = "FILE")]
     pub key_file: Option<PathBuf>,

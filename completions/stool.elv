@@ -34,6 +34,7 @@ set edit:completion:arg-completer[stool] = {|@words|
         }
         &'stool;init'= {
             cand --dotfile-url 'Default Git URL; saved without cloning or contacting the repository'
+            cand --ssh-key 'SSH private key to use for the dotfiles repository (saved after offline key recovery)'
             cand --key-file 'Password-encrypted offline archive produced by stool secrets backup'
             cand --brewfile 'Trusted local Brewfile (defaults to ~/.Brewfile; missing default is skipped)'
             cand --passphrase-file 'Private external backup password file (requires --key-file)'
@@ -71,6 +72,7 @@ set edit:completion:arg-completer[stool] = {|@words|
             cand help 'Print this message or the help of the given subcommand(s)'
         }
         &'stool;dotfile;init'= {
+            cand --ssh-key 'SSH private key (otherwise use saved identity, SSH configuration or discovered keys)'
             cand --branch 'branch'
             cand --source 'Local source repository (saved by init)'
             cand --destination 'Destination directory (defaults to the user''s home)'

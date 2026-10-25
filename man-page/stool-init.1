@@ -4,13 +4,16 @@
 .SH NAME
 stool\-init \- Save dotfiles defaults, initialize Apple settings and optionally restore offline keys
 .SH SYNOPSIS
-\fBstool\-init\fR [\fB\-\-dotfile\-url\fR] [\fB\-\-key\-file\fR] [\fB\-\-brewfile\fR] [\fB\-\-dry\-run\fR] [\fB\-\-non\-interactive\fR] [\fB\-\-passphrase\-file\fR] [\fB\-h\fR|\fB\-\-help\fR]
+\fBstool\-init\fR [\fB\-\-dotfile\-url\fR] [\fB\-\-ssh\-key\fR] [\fB\-\-key\-file\fR] [\fB\-\-brewfile\fR] [\fB\-\-dry\-run\fR] [\fB\-\-non\-interactive\fR] [\fB\-\-passphrase\-file\fR] [\fB\-h\fR|\fB\-\-help\fR]
 .SH DESCRIPTION
 Save dotfiles defaults, initialize Apple settings and optionally restore offline keys
 .SH OPTIONS
 .TP
 \fB\-\-dotfile\-url\fR \fI<URL>\fR
 Default Git URL; saved without cloning or contacting the repository
+.TP
+\fB\-\-ssh\-key\fR \fI<FILE>\fR
+SSH private key to use for the dotfiles repository (saved after offline key recovery)
 .TP
 \fB\-\-key\-file\fR \fI<FILE>\fR
 Password\-encrypted offline archive produced by stool secrets backup

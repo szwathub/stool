@@ -33,6 +33,7 @@ _stool() {
             (init)
 _arguments "${_arguments_options[@]}" : \
 '--dotfile-url=[Default Git URL; saved without cloning or contacting the repository]:URL:_default' \
+'--ssh-key=[SSH private key to use for the dotfiles repository (saved after offline key recovery)]:FILE:_files' \
 '--key-file=[Password-encrypted offline archive produced by stool secrets backup]:FILE:_files' \
 '--brewfile=[Trusted local Brewfile (defaults to ~/.Brewfile; missing default is skipped)]:FILE:_files' \
 '--passphrase-file=[Private external backup password file (requires --key-file)]:FILE:_files' \
@@ -65,6 +66,7 @@ _arguments "${_arguments_options[@]}" : \
         case $line[1] in
             (init)
 _arguments "${_arguments_options[@]}" : \
+'--ssh-key=[SSH private key (otherwise use saved identity, SSH configuration or discovered keys)]:FILE:_files' \
 '--branch=[]:BRANCH:_default' \
 '--source=[Local source repository (saved by init)]:SOURCE:_files' \
 '--destination=[Destination directory (defaults to the user'\''s home)]:DESTINATION:_files' \

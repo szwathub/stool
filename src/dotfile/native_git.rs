@@ -2,6 +2,7 @@
 //! including preserved local Git metadata, then installed by rename after a clean check.
 use super::storage::{self, Paths};
 use crate::common::fs as filesystem;
+use crate::common::ssh::Identity;
 use anyhow::{bail, Context, Result};
 use gix::bstr::ByteSlice;
 use std::collections::BTreeSet;
@@ -16,10 +17,26 @@ pub fn mark(source: &Path) -> Result<()> {
     filesystem::atomic_write(&source.join(".git/stool-builtin"), b"1\n", 0o600)
 }
 
-pub fn clone(url: &str, destination: &Path, branch: Option<&str>) -> Result<()> {
+pub fn clone(
+    url: &str,
+    destination: &Path,
+    branch: Option<&str>,
+    identity: Option<&Identity>,
+) -> Result<()> {
+    let session = identity
+        .map(|identity| identity.session(false))
+        .transpose()?;
+    let mut overrides = vec![
+        "user.name=stool".to_owned(),
+        "user.email=stool@localhost".to_owned(),
+    ];
+    if let Some(session) = &session {
+        overrides.push(format!("core.sshCommand={}", session.command));
+        overrides.push("ssh.variant=ssh".to_owned());
+    }
     let mut fetch = gix::prepare_clone(url, destination)
         .context("Prepare built-in Git clone")?
-        .with_in_memory_config_overrides(["user.name=stool", "user.email=stool@localhost"]);
+        .with_in_memory_config_overrides(overrides);
     let interrupt = AtomicBool::new(false);
     let (mut checkout, _) = fetch
         .fetch_then_checkout(gix::progress::Discard, &interrupt)
@@ -188,7 +205,7 @@ fn copy_tree(source: &Path, target: &Path) -> Result<()> {
     Ok(())
 }
 
-pub fn update(paths: &Paths) -> Result<()> {
+pub fn update(paths: &Paths, identity: Option<&Identity>) -> Result<()> {
     let config = paths
         .config
         .as_ref()
@@ -199,7 +216,7 @@ pub fn update(paths: &Paths) -> Result<()> {
         .prefix(".stool-update-")
         .tempdir_in(paths.source.parent().context("Source has no parent")?)?;
     let stage = temp.path().join("repository");
-    clone(&config.repo, &stage, Some(&config.branch))?;
+    clone(&config.repo, &stage, Some(&config.branch), identity)?;
     let repo = gix::open(&stage)?;
     let new = repo.head_id()?.detach();
     let mut ancestor = false;

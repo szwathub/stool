@@ -1,5 +1,5 @@
 //! Defaults shared by top-level initialization and dotfile initialization.
-use crate::common::{fs as filesystem, git::validate_url};
+use crate::common::{fs as filesystem, git::validate_url, ssh};
 use anyhow::{bail, Context, Result};
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -33,6 +33,7 @@ impl Config {
         }
         let config = Self { path, value };
         config.dotfile_url()?;
+        config.dotfile_ssh_key()?;
         Ok(config)
     }
     pub fn dotfile_url(&self) -> Result<Option<&str>> {
@@ -51,13 +52,39 @@ impl Config {
         validate_url(url)?;
         Ok(Some(url))
     }
-    pub fn save_url(home: &Path, url: &str) -> Result<()> {
+    pub fn dotfile_ssh_key(&self) -> Result<Option<&Path>> {
+        let Some(dotfile) = self.value.get("dotfile") else {
+            return Ok(None);
+        };
+        let table = dotfile
+            .as_table()
+            .context("Global dotfile configuration must be a table")?;
+        let Some(key) = table.get("ssh_key") else {
+            return Ok(None);
+        };
+        let key = key
+            .as_str()
+            .context("Global dotfile.ssh_key must be a string")?;
+        if key.is_empty() || key.chars().any(char::is_control) {
+            bail!("Global dotfile.ssh_key must be a nonempty path without control characters");
+        }
+        let path = Path::new(key);
+        if !path.is_absolute() {
+            bail!("Global dotfile.ssh_key must be an absolute path");
+        }
+        Ok(Some(path))
+    }
+    pub fn save_dotfile(home: &Path, url: &str, ssh_key: Option<&Path>) -> Result<()> {
         validate_url(url)?;
+        let ssh_key = ssh_key
+            .map(|key| ssh::identity_path(home, key))
+            .transpose()?;
         let root = home.join(".stool");
         // Serialize read/merge/write so unrelated defaults survive concurrent changes.
         Self::load(home)?;
         let _lock = filesystem::lock(&root, true)?;
         let mut config = Self::load(home)?;
+        let same_url = config.dotfile_url()? == Some(url);
         let table = config
             .value
             .as_table_mut()
@@ -66,10 +93,20 @@ impl Config {
         let dotfile = table
             .entry("dotfile")
             .or_insert_with(|| toml::Value::Table(Default::default()));
-        dotfile
+        let dotfile = dotfile
             .as_table_mut()
-            .context("Global dotfile configuration must be a table")?
-            .insert("url".into(), url.into());
+            .context("Global dotfile configuration must be a table")?;
+        dotfile.insert("url".into(), url.into());
+        if let Some(key) = &ssh_key {
+            dotfile.insert(
+                "ssh_key".into(),
+                key.to_str()
+                    .context("SSH identity path must be UTF-8")?
+                    .into(),
+            );
+        } else if !same_url {
+            dotfile.remove("ssh_key");
+        }
         filesystem::atomic_write(
             &config.path,
             toml::to_string_pretty(&config.value)?.as_bytes(),

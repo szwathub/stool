@@ -1079,12 +1079,16 @@ _stool() {
             return 0
             ;;
         stool__dotfile__init)
-            opts="-v -h --branch --apply --recurse-submodules --no-recurse-submodules --builtin --source --destination --data --verbose --help [REPO]"
+            opts="-v -h --ssh-key --branch --apply --recurse-submodules --no-recurse-submodules --builtin --source --destination --data --verbose --help [REPO]"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
             fi
             case "${prev}" in
+                --ssh-key)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
                 --branch)
                     COMPREPLY=($(compgen -f "${cur}"))
                     return 0
@@ -1689,13 +1693,17 @@ _stool() {
             return 0
             ;;
         stool__init)
-            opts="-v -h --dotfile-url --key-file --brewfile --dry-run --non-interactive --passphrase-file --verbose --help"
+            opts="-v -h --dotfile-url --ssh-key --key-file --brewfile --dry-run --non-interactive --passphrase-file --verbose --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
             fi
             case "${prev}" in
                 --dotfile-url)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
+                --ssh-key)
                     COMPREPLY=($(compgen -f "${cur}"))
                     return 0
                     ;;

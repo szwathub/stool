@@ -52,6 +52,7 @@ impl Default for EncryptionSettings {
 pub struct GitSettings {
     pub builtin: bool,
     pub lfs: bool,
+    pub ssh_key: Option<PathBuf>,
 }
 
 pub struct Paths {

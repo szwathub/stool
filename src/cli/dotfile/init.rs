@@ -1,9 +1,13 @@
 use clap::Args;
+use std::path::PathBuf;
 
 #[derive(Args, Debug)]
 pub struct InitArgs {
     /// Git URL (defaults to dotfile.url saved by stool init)
     pub repo: Option<String>,
+    /// SSH private key (otherwise use saved identity, SSH configuration or discovered keys)
+    #[arg(long, value_name = "FILE")]
+    pub ssh_key: Option<PathBuf>,
     #[arg(long)]
     pub branch: Option<String>,
     /// Deploy after cloning

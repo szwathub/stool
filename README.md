@@ -36,16 +36,11 @@ stool init --dotfile-url git@github.com:szwathub/dotfiles.git \
 
 `init` 保存 URL 并准备环境，不克隆或部署配置。缺少 GPG 且尚不能安装时先恢复 SSH，GPG 留到第 4 步。没有离线包可省略 `--key-file`。
 
-### 2. 验证私库认证
+### 2. SSH 认证
 
-恢复的 SSH key 须已获 GitHub 授权。加载身份后检查访问权限，无需额外 PAT：
+恢复的 SSH key 须已获 GitHub 授权，并有私库读取权限，无需额外 PAT。`dotfile init` 优先沿用现有 SSH 配置或 agent；遇到公钥认证失败时，会从 `~/.ssh` 中验证可访问目标仓库的身份并保存，通常无需手动执行 `ssh-add` 或设置 `GIT_SSH_COMMAND`。
 
-```bash
-[ -n "${SSH_AUTH_SOCK:-}" ] || eval "$(/usr/bin/ssh-agent -s)"
-/usr/bin/ssh-add "$HOME/.ssh/github_rsa"
-git -c core.sshCommand='ssh -i ~/.ssh/github_rsa -o IdentitiesOnly=yes' \
-  ls-remote git@github.com:szwathub/dotfiles.git HEAD
-```
+多身份或加密私钥可在 `stool init` 或 `stool dotfile init` 中一次指定 `--ssh-key "$HOME/.ssh/github_rsa"`。`init` 在离线恢复后保存该路径；私钥原口令由 SSH 在终端中询问，与备份密码独立。
 
 首次连接核对 [GitHub 主机指纹](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints)。也可使用 HTTPS，先通过凭据助手保存有私库读取权限的 [PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)：
 

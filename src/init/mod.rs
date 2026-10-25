@@ -3,7 +3,7 @@ use crate::cli::{
     secrets::{RestoreArgs, Selection},
 };
 use crate::common::config::{self, Config};
-use crate::common::{fs as filesystem, git::validate_url};
+use crate::common::{fs as filesystem, git::validate_url, ssh};
 use crate::secrets::{self, RestoreSession};
 use anyhow::{bail, Context, Result};
 use std::fs;
@@ -121,12 +121,23 @@ pub fn run(args: &InitCommand, verbose: bool) -> Result<()> {
         }
     };
     validate_url(&url)?;
+    let ssh_key = args
+        .ssh_key
+        .as_ref()
+        .map(|key| ssh::resolve_identity_path(&home, key))
+        .transpose()?;
     let brewfile = local_brewfile(args, &home)?;
     if let Some(file) = &args.key_file {
         RestoreSession::check_file(file)?;
     }
     if args.dry_run {
         println!("Would save dotfile.url to {}: {url}", global.path.display());
+        if let Some(key) = &ssh_key {
+            println!(
+                "Would save dotfile.ssh_key: {} (validated after key recovery)",
+                key.display()
+            );
+        }
         if args.key_file.is_some() {
             println!("Would decrypt and restore offline keys; SSH first when GPG is unavailable (backup not decrypted in preview).");
         }
@@ -201,8 +212,14 @@ fn execute(
     platform: &mut impl Platform,
     verbose: bool,
 ) -> Result<()> {
-    Config::save_url(home, url)?;
-    println!("Saved dotfile.url. Next configuration step: stool dotfile init");
+    // Reject malformed configuration before restoring keys, while allowing an
+    // explicitly selected identity to be supplied by this offline restoration.
+    Config::load(home)?;
+    if archive.is_none() {
+        if let Some(key) = &args.ssh_key {
+            ssh::identity_path(home, key)?;
+        }
+    }
     let mut pending_gpg = false;
     if let Some(archive) = archive {
         if archive.has_gpg() && platform.gpg_available()? {
@@ -215,6 +232,14 @@ fn execute(
         }
     } else {
         println!("Skipped keys: no --key-file supplied.");
+    }
+    Config::save_dotfile(home, url, args.ssh_key.as_deref())?;
+    println!("Saved dotfile.url. Next configuration step: stool dotfile init");
+    if let Some(key) = &args.ssh_key {
+        println!(
+            "Saved dotfile.ssh_key: {}",
+            ssh::resolve_identity_path(home, key)?.display()
+        );
     }
     if platform.apple() {
         platform.homebrew(args.non_interactive, verbose)?;

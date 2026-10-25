@@ -12,3 +12,7 @@ mod passphrase;
 mod prerequisites;
 #[path = "dotfile/quoting.rs"]
 mod quoting;
+
+#[cfg(unix)]
+#[path = "dotfile/ssh.rs"]
+mod ssh;

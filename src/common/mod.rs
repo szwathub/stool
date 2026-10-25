@@ -3,4 +3,5 @@ pub mod constants;
 pub mod fs;
 pub mod git;
 pub mod log;
+pub mod ssh;
 pub mod terminal;
